@@ -1,0 +1,28 @@
+﻿<Window x:Class="LatLon.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LatLon"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="250" Width="400">
+    <Grid>
+        <Label Content="J2K__X" HorizontalAlignment="Left" Margin="25,19,0,0" VerticalAlignment="Top" Width="95"/>
+        <Label Content="J2K__Y" HorizontalAlignment="Left" Margin="25,54,0,0" VerticalAlignment="Top"/>
+        <Label Content="J2K__Z" HorizontalAlignment="Left" Margin="25,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="-5.448,-0.576"/>
+        <TextBlock x:Name="j2kx" HorizontalAlignment="Left" Margin="120,24,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="j2ky" HorizontalAlignment="Left" Margin="120,59,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="j2kz" HorizontalAlignment="Left" Margin="120,96,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <Label Content="Lat" HorizontalAlignment="Left" Margin="35,154,0,0" VerticalAlignment="Top"/>
+        <Label Content="Lon" HorizontalAlignment="Left" Margin="35,185,0,0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lat" HorizontalAlignment="Left" Margin="120,159,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lon" HorizontalAlignment="Left" Margin="120,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <TextBlock x:Name="updated" HorizontalAlignment="Left" Margin="255,24,0,0" TextWrapping="Wrap" Text="0:00:00" VerticalAlignment="Top"/>
+        <Label Content="Last Update" HorizontalAlignment="Left" Margin="177,19,0,0" VerticalAlignment="Top"/>
+        <Label Content="deg/min" HorizontalAlignment="Left" Margin="177,185,0,0" VerticalAlignment="Top"/>
+        <TextBlock Name="degmin" HorizontalAlignment="Left" Margin="255,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        <Label Content="UTC" HorizontalAlignment="Left" Margin="177,54,0,0" VerticalAlignment="Top"/>
+        <TextBlock Name="utcNow" HorizontalAlignment="Left" Margin="255,59,0,0" TextWrapping="Wrap" Text="0:00:00" VerticalAlignment="Top"/>
+        <TextBlock Name="totdeg" HorizontalAlignment="Left" Margin="296,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
