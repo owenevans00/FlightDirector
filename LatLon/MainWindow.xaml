@@ -5,24 +5,70 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LatLon"
         mc:Ignorable="d"
-        Title="MainWindow" Height="250" Width="400">
-    <Grid>
-        <Label Content="J2K__X" HorizontalAlignment="Left" Margin="25,19,0,0" VerticalAlignment="Top" Width="95"/>
-        <Label Content="J2K__Y" HorizontalAlignment="Left" Margin="25,54,0,0" VerticalAlignment="Top"/>
-        <Label Content="J2K__Z" HorizontalAlignment="Left" Margin="25,91,0,0" VerticalAlignment="Top" RenderTransformOrigin="-5.448,-0.576"/>
-        <TextBlock x:Name="j2kx" HorizontalAlignment="Left" Margin="120,24,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="j2ky" HorizontalAlignment="Left" Margin="120,59,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="j2kz" HorizontalAlignment="Left" Margin="120,96,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <Label Content="Lat" HorizontalAlignment="Left" Margin="35,154,0,0" VerticalAlignment="Top"/>
-        <Label Content="Lon" HorizontalAlignment="Left" Margin="35,185,0,0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="lat" HorizontalAlignment="Left" Margin="120,159,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="lon" HorizontalAlignment="Left" Margin="120,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <TextBlock x:Name="updated" HorizontalAlignment="Left" Margin="255,24,0,0" TextWrapping="Wrap" Text="0:00:00" VerticalAlignment="Top"/>
-        <Label Content="Last Update" HorizontalAlignment="Left" Margin="177,19,0,0" VerticalAlignment="Top"/>
-        <Label Content="deg/min" HorizontalAlignment="Left" Margin="177,185,0,0" VerticalAlignment="Top"/>
-        <TextBlock Name="degmin" HorizontalAlignment="Left" Margin="255,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
-        <Label Content="UTC" HorizontalAlignment="Left" Margin="177,54,0,0" VerticalAlignment="Top"/>
-        <TextBlock Name="utcNow" HorizontalAlignment="Left" Margin="255,59,0,0" TextWrapping="Wrap" Text="0:00:00" VerticalAlignment="Top"/>
-        <TextBlock Name="totdeg" HorizontalAlignment="Left" Margin="296,190,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+        Title="MainWindow" Height="450" Width="865">
+    <Window.Resources>
+        <local:Calculator x:Key="c"/>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="LimeGreen"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="LimeGreen"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource c}" Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Content="J2K__X" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
+        <Label Content="J2K__Y" Grid.Column="0" Grid.Row="1" />
+        <Label Content="J2K__Z" Grid.Column="0" Grid.Row="2" />
+        <TextBlock x:Name="j2kx" Grid.Column="1" Grid.Row="0" Text="{Binding X}" VerticalAlignment="Center"/>
+        <TextBlock x:Name="j2ky" Grid.Column="1" Grid.Row="1" Text="{Binding Y}"/>
+        <TextBlock x:Name="j2kz" Grid.Column="1" Grid.Row="2" Text="{Binding Z}"/>
+        <Label Content="Lat" Grid.Column="0" Grid.Row="4"/>
+        <Label Content="Lon" Grid.Column="0" Grid.Row="5"/>
+        <TextBlock x:Name="lat" Grid.Column="1" Grid.Row="4" Text="{Binding Latitude}"/>
+        <TextBlock x:Name="lon" Grid.Column="1" Grid.Row="5" Text="{Binding Longitude}"/>
+        <TextBlock x:Name="updated" Grid.Column="3" Grid.Row="0" Text="{Binding LocalNow, StringFormat={}{0:HH:mm:ss}}"/>
+        <Label Content="Last Update" Grid.Column="2" Grid.Row="0"/>
+        <Label Content="UTC" Grid.Column="2" Grid.Row="1"/>
+        <Label Content="Lon (raw)" Grid.Column="0" Grid.Row="6"/>
+        <TextBlock Name="lonraw" Grid.Column="1" Grid.Row="6" Text="{Binding RawLongitude, StringFormat=N2}"/>
+        <Label Content="Locator X" Grid.Column="0" Grid.Row="7"/>
+        <TextBlock Name="loc_x" Grid.Column="1" Grid.Row="7" Text="{Binding Locator_x}"/>
+        <Label Content="Locator Y" Grid.Column="0" Grid.Row="8"/>
+        <TextBlock Name="loc_y" Grid.Column="1" Grid.Row="8" Text="{Binding Locator_y}"/>
+        <TextBlock Name="utcNow" Grid.Column="3" Grid.Row="1" Text="{Binding UtcNow, StringFormat={}{0:HH:mm:ss}}"/>
+        <Canvas x:Name="map" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="10" Grid.RowSpan="10">
+            <Image Source="/world.topo.bathy.200401.3x5400x2700.png" Stretch="Fill" Height="360" Width="720" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <Ellipse Width="8" Height="8" Fill="DarkRed" Canvas.Left="{Binding Locator_x}" Canvas.Top="{Binding Locator_y}"/>
+        </Canvas>
     </Grid>
 </Window>

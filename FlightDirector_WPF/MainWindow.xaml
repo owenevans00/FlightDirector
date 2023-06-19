@@ -8,32 +8,42 @@
         xmlns:local="clr-namespace:FlightDirector_WPF"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="ISS Flight Director" Height="570" Width="1005"
+        Title="ISS Flight Director" Height="570" Width="1200"
         Background="Black" Foreground="SeaGreen">
     <Window.Resources>
         <local:FlightViewModel x:Key="dd"/>
+        <local:GeoToMapConverter x:Key="gmc"/>
         <CollectionViewSource x:Key="cv" Source="{Binding Source={StaticResource dd}}" >
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="System"/>
             </CollectionViewSource.GroupDescriptions>
-
         </CollectionViewSource>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource dd}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="69*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="78*"/>
+            <ColumnDefinition Width="630"/>
             <!--<ColumnDefinition Width="200"/>-->
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            
+            <local:TelemetryLabel TelemetryId="USLAB000058"/>
+            <local:TelemetryLabel TelemetryId="USLAB000059"/>
+            <local:TelemetryLabel TelemetryId="USLAB000086"/>
+            <local:TelemetryLabel TelemetryId="SIG00000001"/>
+            <local:TelemetryLabel TelemetryId="USLAB000ALT"/>
+            <local:TelemetryLabel TelemetryId="USLAB000LAT"/>
+            <local:TelemetryLabel TelemetryId="USLAB000LON"/>
+        </StackPanel>
         <DataGrid
             ItemsSource="{Binding Source={StaticResource cv}}"
-            AutoGenerateColumns="False" Grid.RowSpan="2"
+            AutoGenerateColumns="False" Grid.Row="1" Grid.RowSpan="2"
             Foreground="SeaGreen" Background="Black" RowBackground="Black"
             SelectionUnit="Cell">
 
@@ -72,14 +82,14 @@
                 <DataGridTextColumn Binding="{Binding TranslatedValue}" Header="Value" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Stretch" Margin="0,0,5,0"/>
-        <Grid Grid.Column="2" Grid.RowSpan="2">
+
+        <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="210"/>
                 <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
 
@@ -89,12 +99,12 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
                 <Button Content="reload" Click="Iss_cam_reload"/>
                 <Button Content="popout" Click="Iss_cam_popout" Grid.Column="1"/>
-                <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="https://ustream.tv/embed/9408562?autoplay=true"/>
+                <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="https://www.youtube.com/embed/xAieE-QtOeM?autoplay=true"/>
             </Grid>
 
             <Grid Grid.Column="1">
@@ -103,270 +113,21 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="7*"/>
                 </Grid.RowDefinitions>
                 <Button Content="reload" Click="EHDC_reload"/>
                 <Button Content="popout" Click="EHDC_popout" Grid.Column="1"/>
-                <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="2" Source="https://ustream.tv/embed/17074538?autoplay=true"/>
+                <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="2" Source="https://www.youtube.com/embed/KG6SL6Mf7ak?autoplay=true"/>
             </Grid>
-
-            <DockPanel Grid.ColumnSpan="2" Grid.Row="1" LastChildFill="True">
-                <ListBox ItemsSource="{Binding Path=Log}" Foreground="SeaGreen" Background="Black" SourceUpdated="ListBox_SourceUpdated"/>
-            </DockPanel>
-
-
         </Grid>
-        <!--<Canvas Grid.Column="3" RenderTransformOrigin="0.5,0.46" Width="200" Height="200" DataContext="{StaticResource dd}">
-            <Canvas.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform ScaleX="0.01" ScaleY="0.01"/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="270"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Canvas.RenderTransform>
-            -->
-        <!-- An egregious hack -->
-        <!--
-            <Label x:Name="USLAB000032" DataContext="{Binding Converter={StaticResource dd}, ConverterParameter=USLAB000032}" Content="{Binding Value}" Foreground="Red" Visibility="Hidden"/>
-            <Label x:Name="USLAB000033" DataContext="{Binding Converter={StaticResource dd}, ConverterParameter=USLAB000033}" Content="{Binding Value}" Foreground="Red" Visibility="Hidden"/>
-            <Label x:Name="USLAB000034" DataContext="{Binding Converter={StaticResource dd}, ConverterParameter=USLAB000034}" Content="{Binding Value}" Foreground="Red" Visibility="Hidden"/>
-            <Ellipse Width="12770" Height="12770" StrokeThickness="100" Stroke="SeaGreen" Canvas.Top="-6385" Canvas.Left="-6385"/>
-            <Line x:Name="line" Stroke="Red" StrokeThickness="100" X1="0" Y1="0" X2="{Binding ElementName=USLAB000032, Path=Content}" Y2="{Binding ElementName=USLAB000033, Path=Content}"/>
-        </Canvas>-->
-        <!--<ScrollViewer>
-        <StackPanel Orientation="Vertical" DataContext="{StaticResource dd}">
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000010]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000011]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000012]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000013]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000014]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000015]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000016]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000017]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000018]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000019]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000020]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000021]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000022]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000047]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000048]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000049]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000050]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000051]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000052]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000053]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000054]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000055]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000056]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[AIRLOCK000057]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE2000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE2000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE2000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE2000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE2000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000010]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000011]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000012]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000013]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000017]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000018]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[NODE3000019]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P1000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P4000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[P6000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000010]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000011]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000012]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000013]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000014]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000015]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000016]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000017]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000018]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000019]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000020]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000021]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000022]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000023]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000024]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[RUSSEG000025]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S0000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S1000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S4000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[S6000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[TIME_000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[TIME_000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000010]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000011]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000012]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000013]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000014]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000015]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000016]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000017]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000018]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000019]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000020]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000021]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000022]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000023]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000024]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000025]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000026]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000027]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000028]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000029]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000030]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000031]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000032]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000033]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000034]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000035]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000036]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000037]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000038]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000039]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000040]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000041]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000042]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000043]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000044]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000045]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000046]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000047]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000048]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000049]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000050]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000051]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000052]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000053]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000054]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000055]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000056]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000057]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000058]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000059]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000060]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000061]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000062]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000063]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000064]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000065]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000081]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000082]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000083]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000084]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000085]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000086]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000087]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000088]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000089]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000090]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000091]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000092]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000093]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000094]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000095]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000096]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000097]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000098]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000099]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000100]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000101]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[USLAB000102]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000001]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000002]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000003]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000004]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000005]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000006]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000007]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000008]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000009]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000010]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000011]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000012]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000013]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000014]}"/>
-            <local:TelemetryLabel DataContext="{Binding Telemetry[Z1000015]}"/>
-        </StackPanel>
-        </ScrollViewer>-->
+            
+        <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="630" Height="315" Grid.Column="1" Grid.Row="2">
+            <Image Canvas.Left="0" Source="/world.topo.bathy.200401.3x5400x2700.png" Canvas.Top="0" Width="630" Height="315"/>
+            <Ellipse Width="10" Height="10" Fill="DarkRed"
+                     Canvas.Left="{Binding Path=[USLAB00ULON].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LON}"
+                     Canvas.Top="{Binding Path=[USLAB00ULAT].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LAT}"/>
+        </Canvas>
     </Grid>
 
 </Window>

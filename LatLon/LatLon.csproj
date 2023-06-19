@@ -5,10 +5,27 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FlightLib\FlightLib.csproj" />
+    <None Remove="world.topo.bathy.200401.3x5400x2700.png" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="world.topo.bathy.200401.3x5400x2700.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FlightLib\FlightLib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
 
 </Project>

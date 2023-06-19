@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="world.topo.bathy.200401.3x5400x2700.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="world.topo.bathy.200401.3x5400x2700.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -17,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FlightLib\FlightLib.csproj" />
+    <ProjectReference Include="..\FlightLib\FlightLib.csproj" />
   </ItemGroup>
 
 </Project>

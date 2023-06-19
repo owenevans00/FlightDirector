@@ -29,11 +29,11 @@ namespace FlightDirector_WPF
             foreach (var i in telemetry.Items) Add(i);
 
             // Calculated values for custom overrides.
-            Add(new TelemetryCalculator("USLAB000VEL", ".STATUS", "Station Velocity", "m/s",
+            Add(new TelemetryCalculator("USLAB000VEL", ".STATUS", "Velocity", "m/s",
                 new[] { telemetry["USLAB000035"], telemetry["USLAB000036"], telemetry["USLAB000037"] },
                 a => MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()).ToString("0.00")));
 
-            Add(new TelemetryCalculator("USLAB000ALT", ".STATUS", "Station Altitude", "km",
+            Add(new TelemetryCalculator("USLAB000ALT", ".STATUS", "Altitude", "km",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
                 a => (MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()) - 6385).ToString("0.00")));
 
@@ -45,9 +45,24 @@ namespace FlightDirector_WPF
                     new DateTime(1980, 1, 1).AddMilliseconds(a.First().AsDouble())
                 )));
 
+            Add(new TelemetryCalculator("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "",
+                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+                a => GeoCoords.Latitude(a).ToString("N2")));
 
-            Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry A O S.", "", new[] { telemetry["TIME_000001"] },
-                a => AOS.Calculate(a), false));
+            Add(new TelemetryCalculator("USLAB00ULON", ".ANGLES", "Unformatted Station Longitude", "",
+                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+                a => GeoCoords.Longitude(a).ToString("N2")));
+
+            Add(new TelemetryCalculator("USLAB000LAT", ".STATUS", "Latitude", "",
+                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+                a => GeoCoords.FormattedLatitude(a)));
+
+            Add(new TelemetryCalculator("USLAB000LON", ".STATUS", "Longitude", "",
+                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+                a => GeoCoords.FormattedLongitude(a)));
+
+            Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
+            a => AOS.SignalState(a), false));
 
             loggers = this.Where(ti => ti.AlertOnChange)
                 .Select(ti => new TelemetryLogger(ti as TelemetryItemBase))
@@ -59,6 +74,13 @@ namespace FlightDirector_WPF
             //using (var strm = new StreamWriter(@"..\..\..\fvm.json", append: false))
             //    strm.Write( JsonSerializer.Serialize(this.Items.ToList(), opts));
         }
+
+        public ITelemetryItem this[string TelemetryId]
+            {
+            get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
+            set { throw new NotSupportedException(); }
+        }
+    
 
         private void L_Log(object sender, LogEvent e) => Log.Add(e.LogText);
 

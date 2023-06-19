@@ -21,7 +21,7 @@ namespace FlightDirector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        TelemetryServer ts;
+        //TelemetryServer ts;
 
         public MainWindow()
         {

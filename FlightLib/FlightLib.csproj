@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--<None Remove="ISS_Public_Telemetry.txt" />-->
+    <None Remove="ISS_Public_Telemetry.txt" />
+    <None Remove="New Text Document.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ISS_Public_Telemetry.txt" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Lightstreamer.DotNetStandard.Client" Version="5.1.1" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Include="ISS_Public_Telemetry.txt" />
+  </ItemGroup>
+
+</Project>

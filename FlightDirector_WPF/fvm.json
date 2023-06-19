@@ -3909,7 +3909,7 @@
     "RawData": {}
   },
   {
-    "Description": "ISS Station Mode",
+    "Description": "Station Mode",
     "Id": "USLAB000086",
     "Name": "Prim_CCS_MDM_SMCC_Cmd_Station_Mode",
     "System": ".STATUS",

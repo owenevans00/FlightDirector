@@ -8,10 +8,10 @@
              d:DataContext="{d:DesignInstance Type=local:NullTelemetry}"
              mc:Ignorable="d">
     <Border BorderThickness=".2" BorderBrush="DarkGray">
-    <Grid>
+    <Grid x:Name="Display">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2*"/>
             <!--<ColumnDefinition Width="*"/>-->
@@ -19,10 +19,10 @@
             <Grid.ToolTip>
                 <TextBlock Text="{Binding Name}"/>
             </Grid.ToolTip>
-        <Label Foreground="SeaGreen" Content="{Binding Path=Id}" Grid.Column="0"/>
-        <Label Foreground="SeaGreen" Content="{Binding Path=System}" Grid.Column="1"/>
-        <Label Foreground="SeaGreen" Content="{Binding Path=Description}" Grid.Column="2"/>
-        <Label Foreground="SeaGreen" Content="{Binding Path=TranslatedValue}" Grid.Column="3"/>
+        <Label Foreground="SeaGreen" Content="{Binding Path=Id}" Grid.Column="0" FontSize="10"/>
+            <Label Foreground="SeaGreen" Content="{Binding Path=System}" Grid.Column="1" FontSize="10"/>
+            <Label Foreground="SeaGreen" Content="{Binding Path=Description}" Grid.Column="2" FontSize="12"/>
+            <Label Foreground="SeaGreen" Content="{Binding Path=TranslatedValue}" Grid.Column="3" FontSize="16"/>
     </Grid>
     </Border>
 </UserControl>
