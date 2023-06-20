@@ -49,6 +49,7 @@ namespace FlightDirector_WPF
                                  0 + date_adj - time_adj + lon_j2k;
 
             if (lon_rad < -Math.PI) lon_rad += 2 * Math.PI;
+            if (lon_rad > Math.PI) lon_rad -= 2 * Math.PI;
 
             return (float)(lon_rad * 180 / Math.PI);
         }

@@ -54,5 +54,12 @@ namespace FlightDirector_WPF
         private void EHDC_popout(object sender, RoutedEventArgs e)
             => Process.Start(new ProcessStartInfo() { FileName = ehd_cam.Source.AbsoluteUri, UseShellExecute = true });
 
+        private void Map_popout(object sender, RoutedEventArgs e)
+        {
+            var fvm = this.Resources["dd"] as FlightViewModel;
+            var maps_uri = $"https://www.google.com/maps/place/{fvm["USLAB000LAT"].TranslatedValue}+{fvm["USLAB000LON"].TranslatedValue}";
+            Process.Start(new ProcessStartInfo() { FileName = maps_uri, UseShellExecute = true });
+
+        }
     }
 }

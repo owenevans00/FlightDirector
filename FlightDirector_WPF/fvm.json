@@ -2489,7 +2489,7 @@
     "Description": "S-Band Radio Frequency Group (RFG 1) Elevation Gimbal Position",
     "Id": "S1000005",
     "Name": "S_Band_RFG1_Est_El_Position",
-    "System": "CATO/VVO",
+    "System": "CATO",
     "TranslatedValue": "0",
     "Units": "\u00B0",
     "Value": null,
