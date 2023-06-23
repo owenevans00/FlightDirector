@@ -19,11 +19,13 @@ namespace FlightDirector_WPF
         private readonly Func<string[], ITelemetryItem> factory = a => TelemetryItem.Create(a);
         private readonly List<TelemetryLogger> loggers;
 
+        private readonly List<string> EVAIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095" };
         public ObservableCollection<string> Log { get; private set; }
-
+        public ObservableCollection<ITelemetryItem> EVA { get; private set; }
+        public ObservableCollection<ITelemetryItem> Status { get; private set; }
         public FlightViewModel()
         {
-            Log = new ObservableCollection<string>();
+            Log = new();
             telemetry = new DataProvider(factory);
             telemetry.ValueUpdated += Telemetry_ValueUpdated;
             foreach (var i in telemetry.Items) Add(i);
@@ -64,23 +66,23 @@ namespace FlightDirector_WPF
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
             a => AOS.SignalState(a), false));
 
-            loggers = this.Where(ti => ti.AlertOnChange)
-                .Select(ti => new TelemetryLogger(ti as TelemetryItemBase))
-                .ToList();
+            loggers = new(this.Where(ti => ti.AlertOnChange)
+                .Select(ti => new TelemetryLogger(ti as TelemetryItemBase)));
             foreach (var l in loggers)
                 l.Log += L_Log;
 
-            //var opts = new JsonSerializerOptions() { WriteIndented = true };
-            //using (var strm = new StreamWriter(@"..\..\..\fvm.json", append: false))
-            //    strm.Write( JsonSerializer.Serialize(this.Items.ToList(), opts));
+            //foreach (var i in this.Where(ti => EVAIds.Contains(ti.Id)))
+            //    this.EVA.Add(i);
+            EVA = new(this.Where(ti => EVAIds.Contains(ti.Id)));
+            Status = new(this.Where(ti => ti.System == ".STATUS"));
         }
 
         public ITelemetryItem this[string TelemetryId]
-            {
+        {
             get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
             set { throw new NotSupportedException(); }
         }
-    
+
 
         private void L_Log(object sender, LogEvent e) => Log.Add(e.LogText);
 

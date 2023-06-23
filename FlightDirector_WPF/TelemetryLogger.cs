@@ -24,7 +24,7 @@ namespace FlightDirector_WPF
         void ValueChanged(object sender, EventArgs e)
         {
             var ti = sender as TelemetryItemBase;
-            var logText = $"{DateTime.UtcNow:HH:mm:ss.ff}\t{ti.Id}\t{ti.TranslatedValue}";
+            var logText = $"{DateTime.UtcNow:HH:mm:ss.ff}\t{ti.Description}\t{ti.TranslatedValue}";
             Log?.Invoke(this, new LogEvent(logText));
         }
     }

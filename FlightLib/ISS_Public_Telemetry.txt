@@ -1,12 +1,12 @@
-AIRLOCK000001	EVA	Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 1), Voltage	PSA_EMU1_VOLTS	EVAS AL AA Rack PS #1 Voltage	V	{0:f2}	N
+AIRLOCK000001	EVA	Umbilical Interface Assembly (UIA) to EMU 1	PSA_EMU1_VOLTS	EVAS AL AA Rack PS #1 Voltage	V	{0:f2}	N
 AIRLOCK000002	EVA	Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 1), Current	PSA_EMU1_AMPS	EVAS AL AA Rack PS #1 Current	A	{0:f2}	N
-AIRLOCK000003	EVA	Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 2), Voltage	PSA_EMU2_VOLTS	EVAS AL AA Rack PS #2 Voltage	V	{0:f2}	N
+AIRLOCK000003	EVA	Umbilical Interface Assembly (UIA) to EMU 2	PSA_EMU2_VOLTS	EVAS AL AA Rack PS #2 Voltage	V	{0:f2}	N
 AIRLOCK000004	EVA	Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 2), Current	PSA_EMU2_AMPS	EVAS AL AA Rack PS #2 Current	A	{0:f2}	N
 AIRLOCK000005	EVA	In-flight Refill Unit (IRU), Voltage	PSA_IRU_Utility_VOLTS	EVAS AL AA Rack PS #5 Voltage	V	{0:f2}	N
 AIRLOCK000006	EVA	In-flight Refill Unit (IRU), Current	PSA_IRU_Utility_AMPS	EVAS AL AA Rack PS #5 Current	A	{0:f2}	N
-AIRLOCK000007	EVA	Supplies power to the spacesuits (EVA Mobility Unit, EMU 1), Voltage	UIA_EV_1_VOLTS	EVAS AL EMU1 Voltage Monitor	V	{0:f2}	N
+AIRLOCK000007	EVA	EVA Mobility Unit, EMU 1	UIA_EV_1_VOLTS	EVAS AL EMU1 Voltage Monitor	V	{0:f2}	N
 AIRLOCK000008	EVA	Supplies power to the spacesuits (EVA Mobility Unit, EMU 1), Current	UIA_EV_1_AMPS	EVAS AL EMU1 Current Monitor	A	{0:f2}	N
-AIRLOCK000009	EVA	Supplies power to the spacesuits (EVA Mobility Unit, EMU 2), Voltage	UIA_EV_2_VOLTS	EVAS AL EMU2 Voltage Monitor	V	{0:f2}	N
+AIRLOCK000009	EVA	EVA Mobility Unit, EMU 2	UIA_EV_2_VOLTS	EVAS AL EMU2 Voltage Monitor	V	{0:f2}	N
 AIRLOCK000010	EVA	Supplies power to the spacesuits (EVA Mobility Unit, EMU 2), Current	UIA_EV_2_AMPS	EVAS AL EMU2 Current Monitor	A	{0:f2}	N
 AIRLOCK000011	EVA	Battery Charger Assembly (BCA) 1 Voltage	BCA1_Analog_VOLTS	EVAS AL AA Rack BC #1 Voltage Monitor	V	{0:f2}	N
 AIRLOCK000012	EVA	Battery Charger Assembly (BCA) 1 Current	BCA1_Analog_AMPS	EVAS AL AA Rack BC #1 Current Monitor	A	{0:f2}	N
@@ -45,7 +45,7 @@ AIRLOCK000044	EVA	Battery Charger Assembly (BCA) 4 Channel 4 Status	BCA4_CH4_STA
 AIRLOCK000045	EVA	Battery Charger Assembly (BCA) 4 Channel 5 Status	BCA4_CH5_STATUS	BCA 4 Channel 5 Status	N/A	0=No History - a charge has not been initiated yet|1=Presently charging|2=Task completed normally|3=Task terminated due to stop switch being toggled|4=Task terminated due to an open circuit error|5=Task terminated due to Wrong Batt or Hi-imp|6=Task terminated due to an over-temperature error|7=Amp-hour capacity test result OK|8=Amp-hour capacity test error|9=Task terminated due to low charge slope error|10=Task terminated due to power error|11=Task terminated due to reverse-polarity error|12=Task terminated due to a short-circuit error|13=Task terminated due to a time-out error|14=Task terminated due to an external-temperature error|15=Discharge|16=Wait on Discharge|17=Wait on Charge	N
 AIRLOCK000046	EVA	Battery Charger Assembly (BCA) 4 Channel 6 Status	BCA4_CH6_STATUS	BCA 4 Channel 6 Status	N/A	0=No History - a charge has not been initiated yet|1=Presently charging|2=Task completed normally|3=Task terminated due to stop switch being toggled|4=Task terminated due to an open circuit error|5=Task terminated due to Wrong Batt or Hi-imp|6=Task terminated due to an over-temperature error|7=Amp-hour capacity test result OK|8=Amp-hour capacity test error|9=Task terminated due to low charge slope error|10=Task terminated due to power error|11=Task terminated due to reverse-polarity error|12=Task terminated due to a short-circuit error|13=Task terminated due to a time-out error|14=Task terminated due to an external-temperature error|15=Discharge|16=Wait on Discharge|17=Wait on Charge	N
 AIRLOCK000047	EVA	Pumps atmosphere from Airlock into Node one during depress, voltage status.	RPCM_AL1A4A_A_RPC_01_Depress_Pump_On_Off_Stat	RPCM ALFR A57 SW01 Voltage Status	N/A	0=Off-Ok|1=Not-Off Ok|3=Not-Off Failed	N
-AIRLOCK000048	EVA	Pumps atmosphere from Airlock into Node one during depress, switch status.	Airlock_Depress_Pump_Power_Switch	EVAS AL DP Switch Status	N/A	0=PUMP OFF CMD|1=PUMP ON CMD	N
+AIRLOCK000048	EVA	Depressurisation status	Airlock_Depress_Pump_Power_Switch	EVAS AL DP Switch Status	N/A	0=PUMP OFF CMD|1=PUMP ON CMD	N
 AIRLOCK000049	ETHOS	Crewlock Pressure	Airlock_Crewlock_Cabin_Pressure	EVAS AL CL Sensor Pressure	mmHg	{0:f2}	N
 AIRLOCK000050	ETHOS	Hi P O2 Supply valve position	Airlock_O2_Hi_P_Supply_Vlv_Actual_Posn	ACS AL High Pressure O2 Supply Valve Actual Position	N/A	0=CLOSED|1=OPEN|2=IN-TRANSIT|3=FAILED	N
 AIRLOCK000051	ETHOS	Lo P O2 Supply Valve position	Airlock_O2_Lo_P_Supply_Vlv_Actual_Posn	ACS AL Low Pressure O2 Supply Valve Actual Position	N/A	0=CLOSED|1=OPEN|2=IN-TRANSIT|3=FAILED	N

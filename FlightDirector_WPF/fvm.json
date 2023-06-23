@@ -1,6 +1,6 @@
 [
   {
-    "Description": "Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 1), Voltage",
+    "Description": "Umbilical Interface Assembly (UIA) to EMU 1",
     "Id": "AIRLOCK000001",
     "Name": "PSA_EMU1_VOLTS",
     "System": "EVA",
@@ -11,7 +11,7 @@
     "RawData": {}
   },
   {
-    "Description": "Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 1), Current",
+    "Description": "Umbilical Interface Assembly (UIA) to EMU 1",
     "Id": "AIRLOCK000002",
     "Name": "PSA_EMU1_AMPS",
     "System": "EVA",
@@ -22,7 +22,7 @@
     "RawData": {}
   },
   {
-    "Description": "Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 2), Voltage",
+    "Description": "Umbilical Interface Assembly (UIA) to EMU 2",
     "Id": "AIRLOCK000003",
     "Name": "PSA_EMU2_VOLTS",
     "System": "EVA",
@@ -33,7 +33,7 @@
     "RawData": {}
   },
   {
-    "Description": "Supplies power through the Umbilical Interface Assembly (UIA) to the spacesuits (EMU 2), Current",
+    "Description": "Umbilical Interface Assembly (UIA) to EMU 2",
     "Id": "AIRLOCK000004",
     "Name": "PSA_EMU2_AMPS",
     "System": "EVA",
@@ -66,7 +66,7 @@
     "RawData": {}
   },
   {
-    "Description": "Supplies power to the spacesuits (EVA Mobility Unit, EMU 1), Voltage",
+    "Description": "EVA Mobility Unit, EMU 1",
     "Id": "AIRLOCK000007",
     "Name": "UIA_EV_1_VOLTS",
     "System": "EVA",
@@ -88,7 +88,7 @@
     "RawData": {}
   },
   {
-    "Description": "Supplies power to the spacesuits (EVA Mobility Unit, EMU 2), Voltage",
+    "Description": "EVA Mobility Unit, EMU 2",
     "Id": "AIRLOCK000009",
     "Name": "UIA_EV_2_VOLTS",
     "System": "EVA",
@@ -997,7 +997,7 @@
     }
   },
   {
-    "Description": "Pumps atmosphere from Airlock into Node one during depress, switch status.",
+    "Description": "Depressurisation status.",
     "Id": "AIRLOCK000048",
     "Name": "Airlock_Depress_Pump_Power_Switch",
     "System": "EVA",
@@ -2294,7 +2294,7 @@
     "Description": "Solar Alpha Rotary Joint (SARJ) Port Joint Angle Commanded Position (degrees)",
     "Id": "S0000005",
     "Name": "SARJ_Port_Commanded_Position",
-    "System": "VVO",
+    "System": ".ANGLES",
     "TranslatedValue": "0",
     "Units": "\u00B0",
     "Value": null,
