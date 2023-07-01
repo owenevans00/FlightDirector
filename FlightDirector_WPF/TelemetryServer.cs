@@ -1,6 +1,7 @@
 ﻿using FlightLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace FlightDirector_WPF
         internal ServerRunner()
         {
             pipe = new NamedPipeServerStream("telemetry", PipeDirection.Out);
-            data = new DataProvider(Factory);
+            data = new DataProvider(Factory, new[] { ".ANGLES" }); 
             data.ValueUpdated += Data_ValueUpdated;
         }
 
@@ -43,7 +44,7 @@ namespace FlightDirector_WPF
         internal void Run()
         {
             //Console.WriteLine("Waiting for connection");
-            pipe.WaitForConnection();
+            pipe.WaitForConnectionAsync();
             //Console.WriteLine("connection established");
             try
             {
@@ -51,6 +52,8 @@ namespace FlightDirector_WPF
                 {
                     Thread.Sleep(500);
                     if (Cancel) break;
+                    //Debug.WriteLine($"Len: {pipe.OutBufferSize}");
+
                 }
             }
             catch (IOException) { }
@@ -58,7 +61,7 @@ namespace FlightDirector_WPF
 
         ITelemetryItem Factory(string[] data)
         {
-            return new TI(pipe) { Id = data[0] };
+            return new TI(pipe) { Id = data[0], System = data[1] };
         }
     }
 
@@ -105,7 +108,7 @@ namespace FlightDirector_WPF
                 {
                     //Console.WriteLine("Disconnected: Waiting for new connection");
                     pipe.Disconnect();
-                    pipe.WaitForConnection();
+                    pipe.WaitForConnectionAsync();
                     //Console.WriteLine("connection established");
                 }
             }

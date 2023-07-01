@@ -21,7 +21,8 @@ namespace FlightDirector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        //TelemetryServer ts;
+        Process unity;
+        TelemetryServer ts;
 
         public MainWindow()
         {
@@ -33,13 +34,8 @@ namespace FlightDirector_WPF
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //ts = new TelemetryServer();
-            //ts.Start();
-        }
-
-        private void ListBox_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-
+            ts = new TelemetryServer();
+            ts.Start();
         }
 
         private void Iss_cam_reload(object sender, RoutedEventArgs e)
@@ -60,6 +56,20 @@ namespace FlightDirector_WPF
             var maps_uri = $"https://www.google.com/maps/place/{fvm["USLAB000LAT"].TranslatedValue}+{fvm["USLAB000LON"].TranslatedValue}";
             Process.Start(new ProcessStartInfo() { FileName = maps_uri, UseShellExecute = true });
 
+        }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            var control = sender as TabItem;
+            var hwndctrl = new HwndControl(control.ActualHeight, control.ActualWidth);
+            (control.Content as Border).Child = hwndctrl;
+            unity = Process.Start(@"C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe", $"-parentHWND {hwndctrl.Handle}");
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            try { unity.Kill(); }
+            finally { }
         }
     }
 }

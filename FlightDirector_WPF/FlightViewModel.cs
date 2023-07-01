@@ -20,16 +20,34 @@ namespace FlightDirector_WPF
         private readonly List<TelemetryLogger> loggers;
 
         private readonly List<string> EVAIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095" };
+        private readonly List<string> VVOIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "USLAB000016", "USLAB000017", "USLAB000081", "USLAB000095", "USLAB000099", "USLAB000100", "USLAB000101", "S0000008", "S0000009", "S0000006", "S0000007" };
+
         public ObservableCollection<string> Log { get; private set; }
         public ObservableCollection<ITelemetryItem> EVA { get; private set; }
+        public ObservableCollection<ITelemetryItem> VVO { get; private set; }
         public ObservableCollection<ITelemetryItem> Status { get; private set; }
+        public ObservableCollection<ITelemetryItem> LSup { get; private set; }
         public FlightViewModel()
         {
             Log = new();
             telemetry = new DataProvider(factory);
             telemetry.ValueUpdated += Telemetry_ValueUpdated;
             foreach (var i in telemetry.Items) Add(i);
+            InitCustomTelemetry();
 
+            loggers = new(this.Where(ti => ti.AlertOnChange)
+                .Select(ti => new TelemetryLogger(ti as TelemetryItemBase)));
+            foreach (var l in loggers)
+                l.Log += L_Log;
+
+            EVA = new(this.Where(ti => EVAIds.Contains(ti.Id)));
+            Status = new(this.Where(ti => ti.System == ".STATUS"));
+            VVO = new(this.Where(ti => VVOIds.Contains(ti.Id)));
+            LSup = new(this.Where(ti => ti.System == "ETHOS"));
+        }
+
+        private void InitCustomTelemetry()
+        {
             // Calculated values for custom overrides.
             Add(new TelemetryCalculator("USLAB000VEL", ".STATUS", "Velocity", "m/s",
                 new[] { telemetry["USLAB000035"], telemetry["USLAB000036"], telemetry["USLAB000037"] },
@@ -64,17 +82,7 @@ namespace FlightDirector_WPF
                 a => GeoCoords.FormattedLongitude(a)));
 
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
-            a => AOS.SignalState(a), false));
-
-            loggers = new(this.Where(ti => ti.AlertOnChange)
-                .Select(ti => new TelemetryLogger(ti as TelemetryItemBase)));
-            foreach (var l in loggers)
-                l.Log += L_Log;
-
-            //foreach (var i in this.Where(ti => EVAIds.Contains(ti.Id)))
-            //    this.EVA.Add(i);
-            EVA = new(this.Where(ti => EVAIds.Contains(ti.Id)));
-            Status = new(this.Where(ti => ti.System == ".STATUS"));
+            a => AOS.SignalState(a), true));
         }
 
         public ITelemetryItem this[string TelemetryId]

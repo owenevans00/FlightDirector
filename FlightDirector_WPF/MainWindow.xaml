@@ -6,6 +6,7 @@
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:local="clr-namespace:FlightDirector_WPF"
         Loaded="Window_Loaded"
+        Closed="Window_Closed"
         mc:Ignorable="d"
         Title="ISS Flight Director" Height="620" Width="1200"
         Background="Black" Foreground="SeaGreen">
@@ -17,6 +18,28 @@
                 <PropertyGroupDescription PropertyName="System"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
+        <Style TargetType="DataGrid">
+            <Setter Property="Foreground" Value="SeaGreen"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="RowBackground" Value="Black"/>
+            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="SeaGreen"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="BorderBrush" Value="DarkSeaGreen"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="SeaGreen"/>
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+        <Style x:Key="ColumnHeaderStyle1" TargetType="DataGridColumnHeader">
+            <!--<Setter Property="Height" Value="30"/>-->
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="SeaGreen"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
     </Window.Resources>
 
     <Grid DataContext="{StaticResource dd}">
@@ -40,10 +63,40 @@
             <local:TelemetryLabel TelemetryId="USLAB000LON"/>
         </StackPanel>
 
-        <TabControl  Grid.Row="1" Grid.RowSpan="2">
+        <TabControl  Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black">
+            <TabItem Header="Visual" Loaded="TabItem_Loaded">
+                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </TabItem>
             <TabItem Header="Normal Ops">
                 <DataGrid
             ItemsSource="{Binding Source={StaticResource dd}, Path=Status}"
+            AutoGenerateColumns="False"
+            SelectionUnit="Cell"
+                    ColumnHeaderStyle="{DynamicResource ColumnHeaderStyle1}">
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Binding="{Binding Id}" Header="TelemetryId" IsReadOnly="True" CanUserReorder="False"/>-->
+                        <DataGridTextColumn Binding="{Binding Description}" Header="System" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding TranslatedValue}" Header="Status" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="EVA" Foreground="SeaGreen" Background="Black">
+                <DataGrid
+            ItemsSource="{Binding Source={StaticResource dd}, Path=EVA}"
+            AutoGenerateColumns="False"
+            Foreground="SeaGreen" Background="Black" RowBackground="Black"
+            SelectionUnit="Cell"
+                    >
+                    <DataGrid.Columns>
+                        <!--<DataGridTextColumn Binding="{Binding Id}" Header="TelemetryId" IsReadOnly="True" CanUserReorder="False"/>-->
+                        <DataGridTextColumn Binding="{Binding Description}" Header="System" IsReadOnly="True"/>
+                        <DataGridTextColumn Binding="{Binding TranslatedValue}" Header="Status" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="ECLSS">
+                <DataGrid
+            ItemsSource="{Binding Source={StaticResource dd}, Path=LSup}"
             AutoGenerateColumns="False"
             Foreground="SeaGreen" Background="Black" RowBackground="Black"
             SelectionUnit="Cell">
@@ -54,9 +107,9 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
-            <TabItem Header="EVA">
+            <TabItem Header="Docking">
                 <DataGrid
-            ItemsSource="{Binding Source={StaticResource dd}, Path=EVA}"
+            ItemsSource="{Binding Source={StaticResource dd}, Path=VVO}"
             AutoGenerateColumns="False"
             Foreground="SeaGreen" Background="Black" RowBackground="Black"
             SelectionUnit="Cell">

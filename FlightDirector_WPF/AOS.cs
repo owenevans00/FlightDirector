@@ -23,6 +23,5 @@ namespace FlightDirector_WPF
             {"9","Stale" },
             {"24", "Signal Acquired" }
         };
-
     }
 }
