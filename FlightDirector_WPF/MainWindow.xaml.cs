@@ -1,4 +1,6 @@
-﻿using FlightLib;
+﻿#define LOAD3D
+//#undef LOAD3D
+using FlightLib;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -11,7 +13,9 @@ namespace FlightDirector_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+#if !DEBUG || LOAD3D
         Process unity;
+#endif
         TelemetryServer ts;
 
         public MainWindow()
@@ -53,15 +57,21 @@ namespace FlightDirector_WPF
             var control = sender as Border;
             var hwndctrl = new HwndControl(control.ActualHeight, control.ActualWidth);
             control.Child = hwndctrl;
-//#if !DEBUG
+#if !DEBUG || LOAD3D
             unity = Process.Start(@"C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe", $"-parentHWND {hwndctrl.Handle}");
-//#endif
+#endif
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            try { unity?.Kill(); }
-            finally {
+            try
+            {
+#if !DEBUG || LOAD3D
+            unity?.Kill(); 
+#endif
+            }
+            finally
+            {
                 ts.Stop();
             }
         }

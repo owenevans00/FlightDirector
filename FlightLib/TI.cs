@@ -9,7 +9,7 @@ namespace FlightLib
 {
     internal class TI : ITelemetryItem
     {
-        NamedPipeServerStream pipe;
+        readonly NamedPipeServerStream pipe;
 
         public string Description { get; set; }
         public string Id { get; set; }
@@ -27,6 +27,8 @@ namespace FlightLib
         public Dictionary<string, string> StateNames { get; set; }
         public bool AlertOnChange { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Dictionary<string, string> RawTelemetry { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public System.Windows.Threading.Dispatcher Dispatcher => throw new NotImplementedException();
 
         internal TI(NamedPipeServerStream pipe)
         {
@@ -48,10 +50,8 @@ namespace FlightLib
                 }
                 catch (IOException)
                 {
-                    //Console.WriteLine("Disconnected: Waiting for new connection");
                     pipe.Disconnect();
                     pipe.WaitForConnectionAsync();
-                    //Console.WriteLine("connection established");
                 }
             }
         }

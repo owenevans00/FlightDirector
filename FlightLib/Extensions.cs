@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System;
 
 namespace FlightLib
 {
@@ -12,7 +13,6 @@ namespace FlightLib
             while (!stream.EndOfStream)
                 yield return stream.ReadLine();
         }
-
 
         public static IEnumerable<T> AsEnumerable<T>(this IEnumerator enumerator)
         {
@@ -33,6 +33,17 @@ namespace FlightLib
 
         public static T SecondOrDefault<T>(this IEnumerable<T> e)
             => e.Skip(1).FirstOrDefault();
+
+        public static string SafeValue(this ITelemetryItem i)
+        {
+            try
+            {
+                return i.Dispatcher.Invoke(() => i.Value);
+            }
+            catch (NotImplementedException)
+            {
+                return i.Value;
+            }
+        }
     }
 }
-    

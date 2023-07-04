@@ -28,7 +28,7 @@ namespace FlightLib
     {
         DataProvider data;
         NamedPipeServerStream pipe;
-        List<CustomTelemetry> customTelemetries = new();
+        //List<CustomTelemetry> customTelemetries = new();
 
         internal bool Cancel;
 
@@ -51,7 +51,7 @@ namespace FlightLib
 
             data = new DataProvider(Factory, new[] { ".ANGLES", ".STATUS" });
             data.ValueUpdated += Data_ValueUpdated;
-            InitCustomTelemetry();
+            //InitCustomTelemetry();
 
             try
             {
@@ -70,12 +70,12 @@ namespace FlightLib
             return new TI(pipe) { Id = data[0], System = data[1] };
         }
 
-        private void InitCustomTelemetry()
-        {
-            customTelemetries.Add(new CustomTelemetry(".STATUS", "USLAB000ALT",
-                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
-                a => $"{(MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385)}",
-                data, pipe));
-        }
+        //private void InitCustomTelemetry()
+        //{
+        //    customTelemetries.Add(new CustomTelemetry(".STATUS", "USLAB000ALT",
+        //        new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+        //        a => $"{(MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385)}",
+        //        data, pipe));
+        //}
     }
 }
