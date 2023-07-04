@@ -13,8 +13,7 @@ namespace FlightDirector_WPF
     internal class HwndControl : HwndHost
     {
         IntPtr hwndHost;
-        int hostHeight, hostWidth;
-
+        private readonly int hostHeight, hostWidth;
         internal const int
           WS_CHILD = 0x40000000,
           WS_VISIBLE = 0x10000000,
@@ -24,7 +23,7 @@ namespace FlightDirector_WPF
           WS_VSCROLL = 0x00200000,
           WS_BORDER = 0x00800000;
 
-        
+
         public HwndControl(double height, double width)
         {
             hostHeight = (int)height;
@@ -52,9 +51,10 @@ namespace FlightDirector_WPF
                                       hwndParent.Handle,
                                       (IntPtr)HOST_ID,
                                       IntPtr.Zero,
-                                      0);
+                                      IntPtr.Zero);
+            //0);
             return new HandleRef(this, hwndHost);
-            
+
         }
 
         [DllImport("user32.dll", EntryPoint = "CreateWindowEx", CharSet = CharSet.Unicode)]
@@ -67,7 +67,8 @@ namespace FlightDirector_WPF
                                               IntPtr hwndParent,
                                               IntPtr hMenu,
                                               IntPtr hInst,
-                                              [MarshalAs(UnmanagedType.AsAny)] object pvParam);
+                                              IntPtr lpParam);
+        //                                              [MarshalAs(UnmanagedType.AsAny)] object pvParam);
 
         [DllImport("user32.dll", EntryPoint = "DestroyWindow", CharSet = CharSet.Unicode)]
         internal static extern bool DestroyWindow(IntPtr hwnd);

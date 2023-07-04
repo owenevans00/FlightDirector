@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using com.lightstreamer.client.events;
+using System.Collections.Generic;
 
 namespace FlightLib
 {
@@ -12,6 +13,7 @@ namespace FlightLib
         string Units { get; set; }
         string Value { get; set; }
         bool AlertOnChange { get; set; }
+        System.Windows.Threading.Dispatcher Dispatcher { get; }
         Dictionary<string, string> StateNames { get; set; }
         Dictionary<string, string> RawTelemetry { get; set; }
     }

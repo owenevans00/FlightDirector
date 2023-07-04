@@ -15,7 +15,8 @@ namespace FlightLib
     {
         private readonly Subscription subData, subStatus;
         private readonly LightstreamerClient client;
-        private Dictionary<string, ITelemetryItem> telemetry;
+        private readonly Dictionary<string, ITelemetryItem> telemetry;
+        private readonly List<ITelemetryItem> customTelemetry=new();
 
         public event EventHandler<UpdateEventArgs> ValueUpdated;
 
@@ -52,31 +53,35 @@ namespace FlightLib
             client.subscribe(subData);
             subData.addListener(this);
 
+            InitCustomTelemetry();
         }
+
+        private void InitCustomTelemetry()
+        {
+            customTelemetry.Add(new CustomTelemetry(".STATUS", "USLAB000ALT",
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                a => $"{(MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385)}",
+                this));
+        }
+
+        public void OnCustomItemUpdate(UpdateEventArgs args)
+            => ValueUpdated?.Invoke(this, args);
 
         public void onItemUpdate(ItemUpdate itemUpdate)
             => ValueUpdated?.Invoke(this, new UpdateEventArgs(itemUpdate));
 
-        public void onStatusChange(string status)
-        {
-            Debug.WriteLine(status);
-        }
+        public void onStatusChange(string status) => Debug.WriteLine(status);
 
-        private IEnumerable<ITelemetryItem> GetTelemetryItems(Func<string[], ITelemetryItem> factory)
+        private static IEnumerable<ITelemetryItem> GetTelemetryItems(Func<string[], ITelemetryItem> factory)
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             var names = asm.GetManifestResourceNames();
-            //ResourceReader r = new(asm.GetManifestResourceStream(names[0]));
 
-            using (UnmanagedMemoryStream ms = asm.GetManifestResourceStream("FlightLib.ISS_Public_Telemetry.txt") as UnmanagedMemoryStream)
-            {
-                return new StreamReader(ms).ReadLines()
-                            .Select(l => l.Split("\t"))
-                            .Select(a => factory(a)).ToList();
-            }
+            using UnmanagedMemoryStream ms = asm.GetManifestResourceStream("FlightLib.ISS_Public_Telemetry.txt") as UnmanagedMemoryStream;
+            return new StreamReader(ms).ReadLines()
+                        .Select(l => l.Split("\t"))
+                        .Select(a => factory(a)).ToList();
         }
-
-
 
         #region unused callbacks
         public void onClearSnapshot(string itemName, int itemPos)
@@ -161,10 +166,14 @@ namespace FlightLib
 
     public class UpdateEventArgs : EventArgs
     {
-        public string Id { get; private set; }
-        public string NewValue { get; private set; }
+        public string Id { get; protected set; }
+        public string NewValue { get; protected set; }
 
-        public Dictionary<string, string> RawTelemetry { get; private set; }
+        public Dictionary<string, string> RawTelemetry { get; protected set; }
+
+        protected UpdateEventArgs() {
+            RawTelemetry = new();
+        }
 
         internal UpdateEventArgs(ItemUpdate update)
         {
@@ -173,6 +182,5 @@ namespace FlightLib
             NewValue = update.getValue("Value");
             Debug.Assert(RawTelemetry != null);
         }
-
     }
 }

@@ -28,6 +28,8 @@ namespace FlightLib
         public bool AlertOnChange { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Dictionary<string, string> RawTelemetry { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public System.Windows.Threading.Dispatcher Dispatcher => throw new NotImplementedException();
+
         internal TI(NamedPipeServerStream pipe)
         {
             this.pipe = pipe;
