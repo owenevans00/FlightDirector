@@ -8,7 +8,7 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         mc:Ignorable="d"
-        Title="ISS Flight Director" Height="620" Width="1200"
+        Title="ISS Flight Director" Height="650" Width="1425" ResizeMode="CanMinimize"
         Background="Black" Foreground="SeaGreen">
     <Window.Resources>
         <local:FlightViewModel x:Key="dd"/>
@@ -44,28 +44,28 @@
 
     <Grid DataContext="{StaticResource dd}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="69*"/>
-            <ColumnDefinition Width="630"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="720"/>
             <!--<ColumnDefinition Width="200"/>-->
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="315"/>
+            <RowDefinition Height="360"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <local:TelemetryLabel TelemetryId="USLAB000058"/>
             <local:TelemetryLabel TelemetryId="USLAB000059"/>
             <local:TelemetryLabel TelemetryId="USLAB000086"/>
-            <local:TelemetryLabel TelemetryId="SIG00000001"/>
+            <local:TelemetryLabel TelemetryId="TIME0000UTC"/>
             <local:TelemetryLabel TelemetryId="USLAB000ALT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LAT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LON"/>
         </StackPanel>
 
         <TabControl  Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black">
-            <TabItem Header="Visual" Loaded="TabItem_Loaded">
-                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <TabItem Header="Visual">
+                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2"  Loaded="Border_Loaded"/>
             </TabItem>
             <TabItem Header="Normal Ops">
                 <DataGrid
@@ -170,14 +170,14 @@
         </TabControl>
 
 
-        <Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="2">
+        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="210"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="360"/>
             </Grid.RowDefinitions>
 
             <Grid>
@@ -211,8 +211,8 @@
             </Grid>
         </Grid>
 
-        <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="630" Height="315" Grid.Column="1" Grid.Row="2">
-            <Image Canvas.Left="0" Source="/world.topo.bathy.200401.3x5400x2700.png" Canvas.Top="0" Width="630" Height="315"/>
+        <Canvas VerticalAlignment="Top" Width="720" Height="360" Grid.Column="1" Grid.Row="2">
+            <Image Source="/world.topo.bathy.200401.3x5400x2700.png" Canvas.Top="0" Canvas.Left="0" Width="720" Height="360" HorizontalAlignment="Center" VerticalAlignment="Top"/>
             <Ellipse Width="10" Height="10" Fill="DarkRed"
                      Canvas.Left="{Binding Path=[USLAB00ULON].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LON}"
                      Canvas.Top="{Binding Path=[USLAB00ULAT].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LAT}"/>

@@ -53,9 +53,9 @@ namespace FlightDirector_WPF
                 new[] { telemetry["USLAB000035"], telemetry["USLAB000036"], telemetry["USLAB000037"] },
                 a => MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()).ToString("0.00")));
 
-            Add(new TelemetryCalculator("USLAB000ALT", ".STATUS", "Altitude", "km",
-                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-                a => (MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()) - 6385).ToString("0.00")));
+            //Add(new TelemetryCalculator("USLAB000ALT", ".STATUS", "Altitude", "km",
+            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+            //    a => (MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()) - 6385).ToString("0.00")));
 
             Add(new TelemetryCalculator("TIME0000UTC", ".STATUS", "Station Time", "UTC",
                 new[] { telemetry["TIME_000001"], telemetry["TIME_000002"] },
@@ -82,7 +82,7 @@ namespace FlightDirector_WPF
                 a => GeoCoords.FormattedLongitude(a)));
 
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
-            a => AOS.SignalState(a), true));
+            a => AOS.SignalState(a), false));
         }
 
         public ITelemetryItem this[string TelemetryId]

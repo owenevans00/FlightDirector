@@ -1,70 +1,12 @@
 ﻿using FlightLib;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace FlightDirector_WPF
+namespace FlightLib
 {
-    class TelemetryServer
-    {
-        readonly ServerRunner sr = new ServerRunner();
-        public void Start()
-        {
-            
-            Thread t = new Thread(new ThreadStart(sr.Run)) { IsBackground = true };
-            t.Start();
-        }
-    }
-
-    internal class ServerRunner
-    {
-        DataProvider data;
-        NamedPipeServerStream pipe;
-
-        internal bool Cancel;
-
-        internal ServerRunner()
-        {
-            pipe = new NamedPipeServerStream("telemetry", PipeDirection.Out);
-            data = new DataProvider(Factory, new[] { ".ANGLES" }); 
-            data.ValueUpdated += Data_ValueUpdated;
-        }
-
-        private void Data_ValueUpdated(object sender, UpdateEventArgs e)
-        {
-            data[e.Id].Value = e.NewValue;
-        }
-
-        internal void Run()
-        {
-            //Console.WriteLine("Waiting for connection");
-            pipe.WaitForConnectionAsync();
-            //Console.WriteLine("connection established");
-            try
-            {
-                while (true)
-                {
-                    Thread.Sleep(500);
-                    if (Cancel) break;
-                    //Debug.WriteLine($"Len: {pipe.OutBufferSize}");
-
-                }
-            }
-            catch (IOException) { }
-        }
-
-        ITelemetryItem Factory(string[] data)
-        {
-            return new TI(pipe) { Id = data[0], System = data[1] };
-        }
-    }
-
     internal class TI : ITelemetryItem
     {
         NamedPipeServerStream pipe;
@@ -90,7 +32,7 @@ namespace FlightDirector_WPF
         {
             this.pipe = pipe;
         }
-        internal void ForwardData(string value)
+        internal virtual void ForwardData(string value)
         {
             Console.WriteLine($"{Id} {value}");
             if (!pipe.IsConnected) return;

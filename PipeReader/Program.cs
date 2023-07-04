@@ -34,7 +34,7 @@ namespace PipeReader
 
         private bool TryConnectPipe()
         {
-            if (!(pipeclient is null) && pipeclient.IsConnected) { return true; }
+            if (pipeclient is not null && pipeclient.IsConnected) { return true; }
             try
             {
                 pipeclient = new NamedPipeClientStream(".", "telemetry", PipeDirection.In);
@@ -54,12 +54,12 @@ namespace PipeReader
         {
             if (!TryConnectPipe()) return;
             if (requestHandle == null || requestHandle.IsCompleted)
-                requestHandle = pipeclient.BeginRead(buffer, 0, 18, GetMessage, null);
+                requestHandle = pipeclient?.BeginRead(buffer, 0, 18, GetMessage, null);
         }
 
         private void GetMessage(IAsyncResult ar)
         {
-            pipeclient.EndRead(ar);
+            pipeclient?.EndRead(ar);
             string id = Encoding.UTF8.GetString(buffer, 0, 14).Replace("\0", "");
             float val = BitConverter.ToSingle(buffer, 14);
 

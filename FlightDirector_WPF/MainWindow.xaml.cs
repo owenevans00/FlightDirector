@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FlightLib;
+using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FlightDirector_WPF
 {
@@ -58,18 +48,22 @@ namespace FlightDirector_WPF
 
         }
 
-        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        private void Border_Loaded(object sender, RoutedEventArgs e)
         {
-            var control = sender as TabItem;
+            var control = sender as Border;
             var hwndctrl = new HwndControl(control.ActualHeight, control.ActualWidth);
-            (control.Content as Border).Child = hwndctrl;
+            control.Child = hwndctrl;
+//#if !DEBUG
             unity = Process.Start(@"C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe", $"-parentHWND {hwndctrl.Handle}");
+//#endif
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            try { unity.Kill(); }
-            finally { }
+            try { unity?.Kill(); }
+            finally {
+                ts.Stop();
+            }
         }
     }
 }
