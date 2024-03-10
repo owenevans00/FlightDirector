@@ -42,8 +42,6 @@ namespace FlightDirector_WPF
 
         protected override HandleRef BuildWindowCore(HandleRef hwndParent)
         {
-            hwndHost = IntPtr.Zero;
-
             hwndHost = CreateWindowEx(0, "static", "",
                                       WS_CHILD | WS_VISIBLE,
                                       0, 0,
@@ -52,9 +50,7 @@ namespace FlightDirector_WPF
                                       (IntPtr)HOST_ID,
                                       IntPtr.Zero,
                                       IntPtr.Zero);
-            //0);
             return new HandleRef(this, hwndHost);
-
         }
 
         [DllImport("user32.dll", EntryPoint = "CreateWindowEx", CharSet = CharSet.Unicode)]
@@ -68,9 +64,9 @@ namespace FlightDirector_WPF
                                               IntPtr hMenu,
                                               IntPtr hInst,
                                               IntPtr lpParam);
-        //                                              [MarshalAs(UnmanagedType.AsAny)] object pvParam);
 
         [DllImport("user32.dll", EntryPoint = "DestroyWindow", CharSet = CharSet.Unicode)]
         internal static extern bool DestroyWindow(IntPtr hwnd);
     }
 }
+

@@ -16,7 +16,7 @@ namespace FlightLib
         private readonly Subscription subData, subStatus;
         private readonly LightstreamerClient client;
         private readonly Dictionary<string, ITelemetryItem> telemetry;
-        private readonly List<ITelemetryItem> customTelemetry=new();
+        private readonly List<ITelemetryItem> customTelemetry = new();
 
         public event EventHandler<UpdateEventArgs> ValueUpdated;
 
@@ -29,7 +29,7 @@ namespace FlightLib
 
         public ITelemetryItem this[string id] { get { return telemetry[id]; } }
 
-        public DataProvider(Func<string[], ITelemetryItem> factory, string[] filters = null)
+        public DataProvider(Func<string[],int, ITelemetryItem> factory, string[] filters = null)
         {
             telemetry = GetTelemetryItems(factory).Where(t => filters == null || filters.Contains(t.System))
                             .ToDictionary(t => t.Id, t => t);
@@ -58,11 +58,27 @@ namespace FlightLib
 
         private void InitCustomTelemetry()
         {
-            customTelemetry.Add(new CustomTelemetry(".STATUS", "USLAB000ALT",
+            customTelemetry.Add(new CustomTelemetry(
+                ".STATUS", 
+                "USLAB000ALT",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
-                a => $"{(MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385)}",
+                (a, b) => (b == "USLAB000032")
+                          ? ($"{MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385}", true)
+                          : ("", false),
                 this));
         }
+
+        //private static (string, bool) Altitude(IEnumerable<float> a, string b)
+        //{
+        //    var l = a.ToList();
+        //    if (b == "USLAB000032")
+        //    {
+        //        Debug.WriteLine(string.Join("\t", l));
+        //        return ($"{MathF.Sqrt(l.Select(i => MathF.Pow(i, 2)).Sum()) - 6385}", true);
+        //    }
+        //    else
+        //        return ("", false);
+        //}
 
         public void OnCustomItemUpdate(UpdateEventArgs args)
             => ValueUpdated?.Invoke(this, args);
@@ -72,7 +88,7 @@ namespace FlightLib
 
         public void onStatusChange(string status) => Debug.WriteLine(status);
 
-        private static IEnumerable<ITelemetryItem> GetTelemetryItems(Func<string[], ITelemetryItem> factory)
+        private static IEnumerable<ITelemetryItem> GetTelemetryItems(Func<string[], int, ITelemetryItem> factory)
         {
             Assembly asm = Assembly.GetExecutingAssembly();
             var names = asm.GetManifestResourceNames();
@@ -80,7 +96,7 @@ namespace FlightLib
             using UnmanagedMemoryStream ms = asm.GetManifestResourceStream("FlightLib.ISS_Public_Telemetry.txt") as UnmanagedMemoryStream;
             return new StreamReader(ms).ReadLines()
                         .Select(l => l.Split("\t"))
-                        .Select(a => factory(a)).ToList();
+                        .Select((a, i) => factory(a, i)).ToList();
         }
 
         #region unused callbacks
@@ -171,7 +187,8 @@ namespace FlightLib
 
         public Dictionary<string, string> RawTelemetry { get; protected set; }
 
-        protected UpdateEventArgs() {
+        protected UpdateEventArgs()
+        {
             RawTelemetry = new();
         }
 

@@ -12,7 +12,9 @@
         Background="Black" Foreground="SeaGreen">
     <Window.Resources>
         <local:FlightViewModel x:Key="dd"/>
-        <local:GeoToMapConverter x:Key="gmc"/>
+        <local:MapViewModel x:Key="map"/>
+        <local:GeoToLatConverter x:Key="gltc"/>
+        <local:GeoToLonConverter x:Key="glnc"/>
         <CollectionViewSource x:Key="cv" Source="{Binding Source={StaticResource dd}}" >
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="System"/>
@@ -62,10 +64,55 @@
             <local:TelemetryLabel TelemetryId="USLAB000LAT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LON"/>
         </StackPanel>
-
-        <TabControl  Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black">
+        
+        <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="1" Grid.RowSpan="2"  Loaded="Border_Loaded"/>
+        <TabControl  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" BorderBrush="Black">
             <TabItem Header="Visual">
-                <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2"  Loaded="Border_Loaded"/>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="360"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="reload" Click="EHDC_reload"/>
+                    <Button Content="popout" Click="EHDC_popout" Grid.Column="1"/>
+                    <Button Content="map" Click="Map_popout" Grid.Column="2"/>
+                    <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="3" Source="https://www.youtube.com/embed/P9C25Un7xaM?autoplay=true"/>
+                </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Button Content="reload" Click="Iss_cam_reload"/>
+                        <Button Content="popout" Click="Iss_cam_popout" Grid.Column="1"/>
+                        <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="https://www.youtube.com/embed/jPTD2gnZFUw?autoplay=true"/>
+                    </Grid>
+                    <Canvas VerticalAlignment="Top" Width="720" Height="360" Grid.ColumnSpan="2" Grid.Row="2"
+                Name="mapCanvas" DataContext="{StaticResource map}">
+                        <Image Source="{Binding Path=MapUri}" Width="{Binding ElementName=mapCanvas, Path=ActualWidth}"/>
+                        <Ellipse Width="10" Height="10" Fill="DarkRed"
+                Canvas.Left="{Binding Path=Longitude, Converter={StaticResource glnc}}"
+                Canvas.Top="{Binding Path=Latitude, Converter={StaticResource gltc}}"/>
+                    </Canvas>
+                </Grid>
             </TabItem>
             <TabItem Header="Normal Ops">
                 <DataGrid
@@ -170,53 +217,12 @@
         </TabControl>
 
 
-        <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="360"/>
-            </Grid.RowDefinitions>
 
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button Content="reload" Click="Iss_cam_reload"/>
-                <Button Content="popout" Click="Iss_cam_popout" Grid.Column="1"/>
-                <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="https://www.youtube.com/embed/xAieE-QtOeM?autoplay=true"/>
-            </Grid>
 
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Button Content="reload" Click="EHDC_reload"/>
-                <Button Content="popout" Click="EHDC_popout" Grid.Column="1"/>
-                <Button Content="map" Click="Map_popout" Grid.Column="2"/>
-                <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="3" Source="https://www.youtube.com/embed/KG6SL6Mf7ak?autoplay=true"/>
-            </Grid>
-        </Grid>
 
-        <Canvas VerticalAlignment="Top" Width="720" Height="360" Grid.Column="1" Grid.Row="2">
-            <Image Source="/world.topo.bathy.200401.3x5400x2700.png" Canvas.Top="0" Canvas.Left="0" Width="720" Height="360" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-            <Ellipse Width="10" Height="10" Fill="DarkRed"
-                     Canvas.Left="{Binding Path=[USLAB00ULON].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LON}"
-                     Canvas.Top="{Binding Path=[USLAB00ULAT].TranslatedValue, Converter={StaticResource gmc}, ConverterParameter=LAT}"/>
-        </Canvas>
+
+
+
     </Grid>
 
 </Window>

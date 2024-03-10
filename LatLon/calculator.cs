@@ -135,7 +135,7 @@ namespace LatLon
 
         public Calculator()
         {
-            data = new DataProvider(d => new TI(d), new[] { ".ANGLES" });
+            data = new DataProvider((d,_) => new TI(d), new[] { ".ANGLES" });
             data.ValueUpdated += Data_ValueUpdated;
         }
 

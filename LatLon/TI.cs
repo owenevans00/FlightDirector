@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace LatLon
 {
@@ -24,5 +25,7 @@ namespace LatLon
         public bool AlertOnChange { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Dictionary<string, string> StateNames { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public Dictionary<string, string> RawTelemetry { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Dispatcher Dispatcher => throw new NotImplementedException();
     }
 }

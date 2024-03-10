@@ -1,6 +1,7 @@
 ﻿using FlightLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Pipes;
 using System.Linq;
 using System.Text;
@@ -12,10 +13,10 @@ namespace FlightLib
     {
         readonly DataProvider data;
         readonly List<string> telemetryids;
-        readonly Func<IEnumerable<float>, string> calculator;
+        readonly Func<IEnumerable<float>, string, (string, bool)> calculator;
 
         internal CustomTelemetry(string system, string id, IEnumerable<string> items,
-            Func<IEnumerable<float>, string> calculator, DataProvider data)
+            Func<IEnumerable<float>, string, (string, bool)> calculator, DataProvider data)
         {
             this.System = system;
             this.Id = id;
@@ -66,8 +67,13 @@ namespace FlightLib
         {
             if (!telemetryids.Contains(e.Id)) return;
             var datapoints = telemetryids.Select(i => data[i].SafeValue() ?? "0")
-                                         .Select(d => float.Parse(d));
-            data.OnCustomItemUpdate(new CustomUpdateEventArgs(this.Id, calculator(datapoints)));
+                                         .Select(d => float.Parse(d)).ToArray();
+
+            //Debug.WriteLine($"{e.Id}\t{data[e.Id].SafeValue()}");
+            var (rval, send) = calculator(datapoints, e.Id);
+            
+            //Debug.WriteLineIf(send, $"{this.Id}\t{rval}\r\n");
+            if (send) data.OnCustomItemUpdate(new CustomUpdateEventArgs(this.Id, rval));
         }
     }
 

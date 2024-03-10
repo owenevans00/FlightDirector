@@ -190,7 +190,7 @@ USLAB000008	ADCO	Control Moment Gyroscope (CMG) Control Torque - Yaw (N-m)	USGNC
 USLAB000009	ADCO	Active Control Moment Gyroscope (CMG) Momentum (Nms)	USGNC_CA_CMG_Mom_Act_Mag	CDT_CA_CMGSysActMomMag	Nms	{0:d0}	N
 USLAB000010	.STATUS	Control Moment Gyroscope Saturation	USGNC_CA_CMG_Mom_Act_Cap_Pct	STS_CA_CMGMomentumPercentCapc	%	{0:f2}	N
 USLAB000011	.STATUS	Desaturation	USGNC_CA_Desat_Request_Inh	STS_CA_InhibitThrusterFiring	N/A	0=ENABLED|1=INHIBITED	Y
-USLAB000012	.STATUS	Guidance, Navigation and Control Mode	USGNC_SEQ_MDM_Current_Mode	STS_SEQ_CurrentModeStatusCC	N/A	0=Default|1=WAIT|2=RESERVED|3=STANDBY|4=CMG ATTITUDE CONTROL|5=CMG AND THRUSTER ASSIST|6=USER DATA GENERATION|7=FREEDRIFT	Y
+USLAB000012	.STATUS	Guidance, Navigation and Control Mode	USGNC_SEQ_MDM_Current_Mode	STS_SEQ_CurrentModeStatusCC	N/A	0=Default|1=WAIT|2=RESERVED|3=STANDBY|4=CMG ONLY|5=CMG/THRUSTER ASSIST|6=USER DATA GENERATION|7=FREEDRIFT	Y
 USLAB000013	ADCO	US Attitude Source	USGNC_AD_Selected_Att_Source	STS_AD_Selected_Attitude	N/A	0=NONE|1=GPS1|2=GPS2|3=Russian_Attitude|4=Ku_Band	N
 USLAB000014	ADCO	US Rate Source	USGNC_AD_Selected_Rate_Source	STS_AD_Selected_Rate	N/A	0=NONE|1=RGA1|2=RGA2|3=RUSSIAN	N
 USLAB000015	ADCO	US State Vector Source	USGNC_SD_Selected_State_Source	STS_SD_SelectedStateSource	N/A	0=NO_SOURCE|1=Unused|2=Unused|3=RUSSIAN|4=GPS1_DETERMINISTIC|5=GPS2_DETERMINISTIC|6=GROUND	N

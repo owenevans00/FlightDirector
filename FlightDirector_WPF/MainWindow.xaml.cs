@@ -1,10 +1,11 @@
 ﻿#define LOAD3D
-//#undef LOAD3D
+#undef LOAD3D
 using FlightLib;
 using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace FlightDirector_WPF
 {
@@ -24,6 +25,7 @@ namespace FlightDirector_WPF
 #if DEBUG
             Title += " - Debug";
 #endif
+            BindConverters();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -49,6 +51,20 @@ namespace FlightDirector_WPF
             var fvm = this.Resources["dd"] as FlightViewModel;
             var maps_uri = $"https://www.google.com/maps/place/{fvm["USLAB000LAT"].TranslatedValue}+{fvm["USLAB000LON"].TranslatedValue}";
             Process.Start(new ProcessStartInfo() { FileName = maps_uri, UseShellExecute = true });
+
+        }
+
+        private void BindConverters()
+        {
+            var glnc = this.Resources["glnc"] as GeoToLonConverter;
+            var gltc = this.Resources["gltc"] as GeoToLatConverter;
+            var canvas = FindName("mapCanvas") as Canvas;
+
+            Binding b1 = new("ActualHeight") { Source = canvas };
+            BindingOperations.SetBinding(gltc, GeoToMapConverter.ScaleToProperty, b1);
+
+            Binding b2 = new("ActualWidth") { Source = canvas };
+            BindingOperations.SetBinding(glnc, GeoToMapConverter.ScaleToProperty, b2);
 
         }
 

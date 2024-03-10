@@ -16,17 +16,27 @@ namespace FlightDirector_WPF
     public class FlightViewModel : ObservableCollection<ITelemetryItem>, INotifyPropertyChanged, IValueConverter
     {
         private readonly DataProvider telemetry;
-        private readonly Func<string[], ITelemetryItem> factory = a => TelemetryItem.Create(a);
+        private readonly Func<string[],int, ITelemetryItem> factory = (a,i) => TelemetryItem.Create(a);
         private readonly List<TelemetryLogger> loggers;
 
         private readonly List<string> EVAIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095" };
         private readonly List<string> VVOIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "USLAB000016", "USLAB000017", "USLAB000081", "USLAB000095", "USLAB000099", "USLAB000100", "USLAB000101", "S0000008", "S0000009", "S0000006", "S0000007" };
+
+        private readonly MapViewModel mvm = new();
 
         public ObservableCollection<string> Log { get; private set; }
         public ObservableCollection<ITelemetryItem> EVA { get; private set; }
         public ObservableCollection<ITelemetryItem> VVO { get; private set; }
         public ObservableCollection<ITelemetryItem> Status { get; private set; }
         public ObservableCollection<ITelemetryItem> LSup { get; private set; }
+        public ITelemetryItem this[string TelemetryId]
+        {
+            get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
+            set { throw new NotSupportedException(); }
+        }
+        public string issLiveUri = "https://www.youtube.com/embed/jPTD2gnZFUw";
+
+
         public FlightViewModel()
         {
             Log = new();
@@ -65,32 +75,26 @@ namespace FlightDirector_WPF
                     new DateTime(1980, 1, 1).AddMilliseconds(a.First().AsDouble())
                 )));
 
-            Add(new TelemetryCalculator("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "",
+             Add(new TelemetryCalculator("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-                a => GeoCoords.Latitude(a).ToString("N2")));
+                a => mvm.Latitude.ToString("N2")));
 
             Add(new TelemetryCalculator("USLAB00ULON", ".ANGLES", "Unformatted Station Longitude", "",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-                a => GeoCoords.Longitude(a).ToString("N2")));
+                a => mvm.Longitude.ToString("N2")));
 
             Add(new TelemetryCalculator("USLAB000LAT", ".STATUS", "Latitude", "",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-                a => GeoCoords.FormattedLatitude(a)));
+                a => mvm.FormattedLatitude));
 
             Add(new TelemetryCalculator("USLAB000LON", ".STATUS", "Longitude", "",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-                a => GeoCoords.FormattedLongitude(a)));
+                a => mvm.FormattedLongitude));
+         
 
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
             a => AOS.SignalState(a), false));
         }
-
-        public ITelemetryItem this[string TelemetryId]
-        {
-            get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
-            set { throw new NotSupportedException(); }
-        }
-
 
         private void L_Log(object sender, LogEvent e) => Log.Add(e.LogText);
 
