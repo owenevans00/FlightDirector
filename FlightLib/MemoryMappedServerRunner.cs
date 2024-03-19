@@ -14,7 +14,7 @@ namespace FlightLib
     public class MemoryMappedServerRunner : ServerRunner
     {
         const string maybeAppSID = "S-1-15-2-1162135864-640799773-311411905-3086399623-335766872-3597601787-2471990241";
-        MemoryMappedFile mfile;
+        readonly MemoryMappedFile mfile;
         public MemoryMappedServerRunner() : base()
         {
             try

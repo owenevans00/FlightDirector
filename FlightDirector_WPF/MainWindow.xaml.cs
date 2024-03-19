@@ -2,6 +2,7 @@
 #undef LOAD3D
 using FlightLib;
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -74,7 +75,7 @@ namespace FlightDirector_WPF
             var hwndctrl = new HwndControl(control.ActualHeight, control.ActualWidth);
             control.Child = hwndctrl;
 #if !DEBUG || LOAD3D
-            unity = Process.Start(@"C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe", $"-parentHWND {hwndctrl.Handle}");
+            unity = Process.Start(Properties.Settings.Default.ISS3DPath, $"-parentHWND {hwndctrl.Handle}");
 #endif
         }
 

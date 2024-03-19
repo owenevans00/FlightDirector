@@ -1,17 +1,18 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Threading;
 
 namespace FlightLib
 {
-    internal class NamedPipeServerRunner : ServerRunner
+    public class NamedPipeServerRunner : ServerRunner
     {
-        NamedPipeServerStream pipe;
+        readonly NamedPipeServerStream pipe;
         //List<CustomTelemetry> customTelemetries = new();
 
         
 
-        internal NamedPipeServerRunner():base()
+        public NamedPipeServerRunner():base()
         {
             pipe = new NamedPipeServerStream("telemetry", PipeDirection.Out);
             Init(Factory, new[] { ".ANGLES", ".STATUS" });
@@ -19,9 +20,9 @@ namespace FlightLib
 
         public override void Run()
         {
-            //Console.WriteLine("Waiting for connection");
+            Debug.WriteLine("Waiting for connection");
             pipe.WaitForConnection();
-            //Console.WriteLine("connection established");
+            Debug.WriteLine("connection established");
 
 
             //InitCustomTelemetry();

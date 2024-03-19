@@ -60,7 +60,7 @@ namespace FlightDirector_WPF
             set { SetValue(LongitudeProperty, value); }
         }
 
-        public string FormattedLatitude => $"{Abs(Latitude):N2}°{(Latitude < 0 ? "N": "S")}";
+        public string FormattedLatitude => $"{Abs(Latitude):N2}°{(Latitude < 0 ? "S": "N")}";
 
         public string FormattedLongitude => $"{Abs(Longitude):N2}°{(Longitude > 0 ?"E" : "W")}";
 
@@ -112,7 +112,7 @@ namespace FlightDirector_WPF
             Debug.WriteLine($"DateAdj = {R2D(date_adj)}°");
         }
 
-        private void Telemetry_ValueUpdated(object? sender, UpdateEventArgs e)
+        private void Telemetry_ValueUpdated(object sender, UpdateEventArgs e)
         {
             if (!stateVec.ContainsKey(e.Id)) return;
             stateVec[e.Id] = float.Parse(e.NewValue);
