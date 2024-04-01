@@ -177,8 +177,8 @@ S6000005	SPARTAN	Photovoltaic Control Unit (PVCU) - Solar Array - 1B - Drive Cur
 S6000006	CDH	Photovoltaic Control Unit (PVCU) - Solar Array - 1B Multiplexer/Demultiplexer (MDM) 120 Volt On-Off Status	DCSU_1B_PVCU_On_Off_V_Stat	DCSU S6UPR-1B SCA MDM 120V On/Off Status	N/A	0=Not Enabled|1=Enabled	N
 S6000007	.ANGLES	Photovoltaic Control Unit (PVCU) - Solar Array - 3B - Beta Gimbal Assembly (BGA) Position (degrees)	PVCU_S6_Prim_BGA_3B_Resolver_Position_Conv	S6 PV_PSN_1_ECU_BGA_Resolver_Conv_Position	deg	{0:f1}	N
 S6000008	.ANGLES	Photovoltaic Control Unit (PVCU) - Solar Array - 1B - Beta Gimbal Assembly (BGA) Position (degrees)	PVCU_S6_Prim_BGA_1B_Resolver_Position_Conv	S6 PV_PSN_2_ECU_BGA_Resolver_Conv_Position	deg	{0:f1}	N
-TIME_000001	N/A	Greenwich Mean Time (GMT)	Time of Occurrence	Time of Occurrence	ms	%mT	N
-TIME_000002	N/A	Year	Year of Occurrence	Year of Occurrence	-	{0:d0}	N
+TIME_000001	.STATUS	Greenwich Mean Time (GMT)	Time of Occurrence	Time of Occurrence	ms	%mT	N
+TIME_000002	.STATUS	Year	Year of Occurrence	Year of Occurrence	-	{0:d0}	N
 USLAB000001	ADCO	Control Moment Gyroscope (CMG)-1 On-Line	USGNC_SEQ_CMG1_Online	STS_SEQ_CMG1InUse	N/A	0=NOT IN USE|1=IN USE	N
 USLAB000002	ADCO	Control Moment Gyroscope (CMG)-2 On-Line	USGNC_SEQ_CMG2_Online	STS_SEQ_CMG2InUse	N/A	0=NOT IN USE|1=IN USE	N
 USLAB000003	ADCO	Control Moment Gyroscope (CMG)-3 On-Line	USGNC_SEQ_CMG3_Online	STS_SEQ_CMG3InUse	N/A	0=NOT IN USE|1=IN USE	N

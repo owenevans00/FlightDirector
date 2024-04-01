@@ -1,11 +1,6 @@
-﻿using FlightLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO.Pipes;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightLib
 {
@@ -56,6 +51,7 @@ namespace FlightLib
 
         public System.Windows.Threading.Dispatcher Dispatcher
             => throw new NotImplementedException();
+
         public string TranslatedValue
         {
             get => throw new NotImplementedException();
@@ -69,10 +65,7 @@ namespace FlightLib
             var datapoints = telemetryids.Select(i => data[i].SafeValue() ?? "0")
                                          .Select(d => float.Parse(d)).ToArray();
 
-            //Debug.WriteLine($"{e.Id}\t{data[e.Id].SafeValue()}");
             var (rval, send) = calculator(datapoints, e.Id);
-            
-            //Debug.WriteLineIf(send, $"{this.Id}\t{rval}\r\n");
             if (send) data.OnCustomItemUpdate(new CustomUpdateEventArgs(this.Id, rval));
         }
     }

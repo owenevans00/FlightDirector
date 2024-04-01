@@ -31,5 +31,23 @@ namespace FlightDirector_WPF.Properties {
                 return ((string)(this["ISS3DPath"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"https://www.youtube.com/embed/jPTD2gnZFUw\"")]
+        public string ISSCamUrl {
+            get {
+                return ((string)(this["ISSCamUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"https://www.youtube.com/embed/P9C25Un7xaM\"")]
+        public string EHDCCamUrl {
+            get {
+                return ((string)(this["EHDCCamUrl"]));
+            }
+        }
     }
 }

@@ -34,8 +34,9 @@ namespace FlightDirector_WPF
             get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
             set { throw new NotSupportedException(); }
         }
-        public string issLiveUri = "https://www.youtube.com/embed/jPTD2gnZFUw";
 
+        public string IssCamUrl = Properties.Settings.Default.ISSCamUrl + "?autoplay=true";// "https://www.youtube.com/embed/jPTD2gnZFUw";
+        public string EhdcCamUrl = Properties.Settings.Default.EHDCCamUrl + "?autoplay=true";
 
         public FlightViewModel()
         {
