@@ -1,5 +1,4 @@
-﻿using com.lightstreamer.client.events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace FlightLib
 {

@@ -48,8 +48,7 @@ namespace FlightLib
             subData = new Subscription("MERGE",
                 telemetry.Keys.Where(k => !k.StartsWith("TIME")).ToArray(),
                 new string[] { "Value", "TimeStamp" }
-                )
-            { RequestedMaxFrequency = "5" };
+                ) { RequestedMaxFrequency = "5" };
             client.subscribe(subData);
             subData.addListener(this);
 
@@ -67,18 +66,6 @@ namespace FlightLib
                           : ("", false),
                 this));
         }
-
-        //private static (string, bool) Altitude(IEnumerable<float> a, string b)
-        //{
-        //    var l = a.ToList();
-        //    if (b == "USLAB000032")
-        //    {
-        //        Debug.WriteLine(string.Join("\t", l));
-        //        return ($"{MathF.Sqrt(l.Select(i => MathF.Pow(i, 2)).Sum()) - 6385}", true);
-        //    }
-        //    else
-        //        return ("", false);
-        //}
 
         public void OnCustomItemUpdate(UpdateEventArgs args)
             => ValueUpdated?.Invoke(this, args);
@@ -98,8 +85,9 @@ namespace FlightLib
                         .Select(l => l.Split("\t"))
                         .Select((a, i) => factory(a, i)).ToList();
         }
-
         #region unused callbacks
+#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable CA1822 // Mark members as static
         public void onClearSnapshot(string itemName, int itemPos)
         {
 
@@ -125,13 +113,12 @@ namespace FlightLib
 
         }
 
-
-        public void onListenEnd(Subscription subscription)
+        public void onListenEnd(Subscription _)
         {
 
         }
 
-        public void onListenStart(Subscription subscription)
+        public void onListenStart(Subscription _)
         {
 
         }
@@ -156,12 +143,12 @@ namespace FlightLib
 
         }
 
-        public void onListenEnd(LightstreamerClient client)
+        public void onListenEnd(LightstreamerClient _)
         {
-            throw new NotImplementedException();
+            
         }
 
-        public void onListenStart(LightstreamerClient client)
+        public void onListenStart(LightstreamerClient _)
         {
 
         }
@@ -171,12 +158,22 @@ namespace FlightLib
 
         }
 
-
-
         public void onPropertyChange(string property)
         {
 
         }
+
+        public void onListenEnd()
+        {
+            
+        }
+
+        public void onListenStart()
+        {
+            
+        }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore CA1822 // Mark members as static
         #endregion
     }
 

@@ -63,10 +63,6 @@ namespace FlightDirector_WPF
                 new[] { telemetry["USLAB000035"], telemetry["USLAB000036"], telemetry["USLAB000037"] },
                 a => MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()).ToString("0.00")));
 
-            //Add(new TelemetryCalculator("USLAB000ALT", ".STATUS", "Altitude", "km",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => (MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()) - 6385).ToString("0.00")));
-
             Add(new TelemetryCalculator("TIME0000UTC", ".STATUS", "Station Time", "UTC",
                 new[] { telemetry["TIME_000001"], telemetry["TIME_000002"] },
                 a => string.Format(
@@ -90,7 +86,11 @@ namespace FlightDirector_WPF
             Add(new TelemetryCalculator("USLAB000LON", ".STATUS", "Longitude", "",
                 new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
                 a => mvm.FormattedLongitude));
-         
+
+            Add(new TelemetryCalculator("USLAB000HDG", ".STATUS", "Heading", "",
+                new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
+                a => mvm.Heading.ToString("000")));
+
 
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
             a => AOS.SignalState(a), false));

@@ -48,7 +48,6 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="720"/>
-            <!--<ColumnDefinition Width="200"/>-->
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
@@ -65,9 +64,11 @@
             <local:TelemetryLabel TelemetryId="USLAB000LAT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LON"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
             <local:TelemetryLabel TelemetryId="S0000008"/>
             <local:TelemetryLabel TelemetryId="S0000009"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2">
             <local:TelemetryLabel TelemetryId="USLAB000010"/>
             <local:TelemetryLabel TelemetryId="USLAB000095"/>
         </StackPanel>
@@ -123,6 +124,7 @@
                         <Ellipse Width="10" Height="10" Fill="DarkRed"
                             Canvas.Left="{Binding Path=Longitude, Converter={StaticResource glnc}}"
                             Canvas.Top="{Binding Path=Latitude, Converter={StaticResource gltc}}"/>
+                        <Label Canvas.Left="80" Canvas.Top="337" Foreground="Black">Earth Imagery: Visible Earth, NASA Goddard Space Flight Center 2004. ISS 3D Model: NASA Johnson Space Center 2011</Label>
                     </Canvas>
                 </Grid>
             </TabItem>
@@ -227,14 +229,5 @@
             ItemsSource="{Binding Source={StaticResource dd}, Path=Log}"/>
             </TabItem>
         </TabControl>
-
-
-
-
-
-
-
-
     </Grid>
-
 </Window>

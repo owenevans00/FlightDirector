@@ -36,14 +36,17 @@ namespace FlightLib
 
         public static string SafeValue(this ITelemetryItem i)
         {
-            try
-            {
-                return i.Dispatcher.Invoke(() => i.Value);
-            }
-            catch (NotImplementedException)
-            {
+            if (i.Dispatcher is not null)
+                try
+                {
+                    return i.Dispatcher.Invoke(() => i.Value);
+                }
+                catch (NotImplementedException)
+                {
+                    return i.Value;
+                }
+            else
                 return i.Value;
-            }
         }
     }
 }
