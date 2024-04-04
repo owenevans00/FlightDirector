@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System;
+using System.Threading.Tasks;
 
 namespace FlightLib
 {
@@ -37,16 +38,16 @@ namespace FlightLib
         public static string SafeValue(this ITelemetryItem i)
         {
             if (i.Dispatcher is not null)
-                try
-                {
-                    return i.Dispatcher.Invoke(() => i.Value);
-                }
-                catch (NotImplementedException)
-                {
-                    return i.Value;
-                }
+                try { return i.Dispatcher.Invoke(() => i.Value); }
+                catch (TaskCanceledException) { return i.Value; }
+                catch (NotImplementedException) { return i.Value; }
             else
                 return i.Value;
+        }
+
+        public static void WriteLineIf(this TextWriter writer, bool condition, string text)
+        {
+            if (condition) writer.WriteLine(text);
         }
     }
 }

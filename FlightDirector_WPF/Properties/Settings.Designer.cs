@@ -25,7 +25,7 @@ namespace FlightDirector_WPF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"C:\\Users\\owene\\source\\ISS_3D\\Build\\ISS_3D.exe\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\owene\\source\\ISS_3D\\Build\\ISS_3D.exe")]
         public string ISS3DPath {
             get {
                 return ((string)(this["ISS3DPath"]));
@@ -34,7 +34,7 @@ namespace FlightDirector_WPF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"https://www.youtube.com/embed/jPTD2gnZFUw\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.youtube.com/embed/jPTD2gnZFUw")]
         public string ISSCamUrl {
             get {
                 return ((string)(this["ISSCamUrl"]));
@@ -43,7 +43,7 @@ namespace FlightDirector_WPF.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"https://www.youtube.com/embed/P9C25Un7xaM\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.youtube.com/embed/P9C25Un7xaM")]
         public string EHDCCamUrl {
             get {
                 return ((string)(this["EHDCCamUrl"]));

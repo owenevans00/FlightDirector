@@ -1,4 +1,5 @@
-﻿using FlightLib;
+﻿using com.lightstreamer.client;
+using FlightLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +15,10 @@ namespace FlightDirector_WPF
         //Dictionary<string, string> translations;
 
         public static ITelemetryItem Create(string[] data) => new TelemetryItem(data);
-
+        public static TelemetryItem Convert(ITelemetryItem item) {
+            var data = new[] { item.Id, item.System, item.Description, item.Name, string.Empty, item.Units,string.Empty, "N" };
+            return new TelemetryItem(data);
+        }
 
         protected TelemetryItem(string[] data)
         {

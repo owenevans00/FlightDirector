@@ -1,4 +1,5 @@
 ﻿using com.lightstreamer.client;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ namespace FlightLib
         private readonly LightstreamerClient client;
         private readonly Dictionary<string, ITelemetryItem> telemetry;
         private readonly List<ITelemetryItem> customTelemetry = new();
+        private readonly ECIToGeoConverter e2g = new();
 
         public event EventHandler<UpdateEventArgs> ValueUpdated;
 
@@ -26,10 +28,15 @@ namespace FlightLib
 
         public ITelemetryItem this[string id] { get { return telemetry[id]; } }
 
-        public DataProvider(Func<string[],int, ITelemetryItem> factory, string[] filters = null)
+        public DataProvider(Func<string[], int, ITelemetryItem> factory, string[] filters = null, Func<ITelemetryItem, ITelemetryItem> converter = null)
         {
-            telemetry = GetTelemetryItems(factory).Where(t => filters == null || filters.Contains(t.System))
-                            .ToDictionary(t => t.Id, t => t);
+            InitCustomTelemetry();
+
+            converter ??= new Func<ITelemetryItem, ITelemetryItem>(i => i);
+            telemetry = GetTelemetryItems(factory)
+                       .Concat(customTelemetry.ConvertAll(i => converter(i)))
+                       .Where(t => filters == null || filters.Contains(t.System) || t.Id.StartsWith("TIME"))
+                       .ToDictionary(t => t.Id, t => t);
 
             client = new LightstreamerClient("https://push.lightstreamer.com", "ISSLIVE");
             client.addListener(this);
@@ -45,23 +52,74 @@ namespace FlightLib
             subData = new Subscription("MERGE",
                 telemetry.Keys.Where(k => !k.StartsWith("TIME")).ToArray(),
                 new string[] { "Value", "TimeStamp" }
-                ) { RequestedMaxFrequency = "5" };
+                )
+            { RequestedMaxFrequency = "5" };
             client.subscribe(subData);
             subData.addListener(this);
-
-            InitCustomTelemetry();
         }
 
+        // Calculated values for custom overrides.
         private void InitCustomTelemetry()
         {
-            customTelemetry.Add(new CustomTelemetry(
-                ".STATUS", 
-                "USLAB000ALT",
-                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
-                (a, b) => (b == "USLAB000032")
-                          ? ($"{MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()) - 6385}", true)
-                          : ("", false),
+            customTelemetry.Add(new CustomTelemetry("TIME0000UTC", ".STATUS", "Station Time", "Station Time", "UTC",
+                new[] { "TIME_000001", "TIME_000002" },
+                (a, b) =>
+                {
+                    var year = (int)a.SecondOrDefault();
+                    if (year == 1980 || year == 0) year = DateTime.Now.Year;
+                    DateTime d = new DateTime(year, 1, 1);
+                    d = d.Add(TimeSpan.FromMilliseconds(a.First()));
+                    return ($"{d:yyyy-MM-dd HH:mm:ss} UTC", true);
+                },
                 this));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB000VEL", ".ANGLES", "Velocity", "Velocity", "m/s",
+                new[] { "USLAB000035", "USLAB000036", "USLAB000037" },
+                (a, b) => (MathF.Sqrt(a.Select(i => MathF.Pow(i, 2)).Sum()).ToString("0.00"), true),
+                this));
+
+            customTelemetry.Add(new CustomTelemetry(
+               "USLAB000ALT", ".ANGLES", "Station Altitude", "Station Altitude", "km",
+               e2g.telemetryIds,
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Altitude}", true); },
+               this
+               ));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "Unformatted Station Latitude", "",
+               new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Latitude}", true); },
+                this
+                ));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB00ULON", ".ANGLES", "Unformatted Station Longitude", "Unformatted Station Longitude", "",
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Longitude}", true); },
+                this
+                ));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB000LAT", ".ANGLES", "Latitude", "Latitude", "",
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.FormattedLatitude}", true); },
+                this
+                ));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB000LON", ".ANGLES", "Longitude", "Longitude", "",
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.FormattedLongitude}", true); },
+                this
+                ));
+
+            customTelemetry.Add(new CustomTelemetry("USLAB000HDG", ".ANGLES", "Heading", "", "",
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Heading}", true); },
+                this
+                ));
+
+
+            //customTelemetry.Add(new CustomTelemetry("SIG00000001", ".STATUS", "Telemetry", "", 
+            //    new[] { "TIME_000001" },
+            //    (a,b) => (AOS.SignalState(a), true),
+            //    this));
         }
 
         public void OnCustomItemUpdate(UpdateEventArgs args)
@@ -142,7 +200,7 @@ namespace FlightLib
 
         public void onListenEnd(LightstreamerClient _)
         {
-            
+
         }
 
         public void onListenStart(LightstreamerClient _)
@@ -162,12 +220,12 @@ namespace FlightLib
 
         public void onListenEnd()
         {
-            
+
         }
 
         public void onListenStart()
         {
-            
+
         }
 #pragma warning restore IDE1006 // Naming Styles
 #pragma warning restore CA1822 // Mark members as static

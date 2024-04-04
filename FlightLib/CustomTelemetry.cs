@@ -10,11 +10,14 @@ namespace FlightLib
         readonly List<string> telemetryids;
         readonly Func<IEnumerable<float>, string, (string, bool)> calculator;
 
-        internal CustomTelemetry(string system, string id, IEnumerable<string> items,
+        internal CustomTelemetry(string id, string system, string name, string description, string units, IEnumerable<string> items,
             Func<IEnumerable<float>, string, (string, bool)> calculator, DataProvider data)
         {
             this.System = system;
             this.Id = id;
+            this.Name = name;
+            this.Description = description;
+            this.Units = units;
             telemetryids = items.ToList();
             this.calculator = calculator;
             this.data = data;
@@ -28,35 +31,15 @@ namespace FlightLib
         public string Value { get; set; }
 
         #region unused properties
-        public string Description
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-        public bool AlertOnChange
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-        public Dictionary<string, string> StateNames
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
-        public Dictionary<string, string> RawTelemetry
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
+        public string Description { get; set; }
+        public bool AlertOnChange { get; set; }
+        public Dictionary<string, string> StateNames { get; set; }
+        public Dictionary<string, string> RawTelemetry { get; set; }
 
         public System.Windows.Threading.Dispatcher Dispatcher
-            => throw new NotImplementedException();
+            => null;
 
-        public string TranslatedValue
-        {
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
-        }
+        public string TranslatedValue { get=>Value; set=>throw new NotImplementedException(); }
         #endregion
 
         private void Data_ValueUpdated(object sender, UpdateEventArgs e)

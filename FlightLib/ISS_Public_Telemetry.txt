@@ -329,4 +329,3 @@ CSASPDM0020	CSA	MSS OCS SPDM Body Roll Joint Position			deg	Angle	N
 CSASPDM0022	CSA	MSS Payload Status OCS SPDM Body			n/a	0=Released|1=Captive|2=Captured	N
 CSAMBS00002	CSA	MSS OCS Payload Status MBS MCAS			n/a	0=Released|1=Captured	N
 CSAMBA00004	CSA	MSS OCS Payload Status MBS POA			n/a	0=Released|1=Captive|2=Captured	N
-USLAB000ALT	.STATUS	Station Altitude	[custom]	[custom]	km	{0:f2}	N

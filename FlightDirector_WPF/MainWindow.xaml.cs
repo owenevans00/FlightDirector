@@ -1,5 +1,5 @@
 ﻿#define LOAD3D
-//#undef LOAD3D
+#undef LOAD3D
 using FlightLib;
 using System;
 using System.Diagnostics;

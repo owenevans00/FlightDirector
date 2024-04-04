@@ -102,7 +102,7 @@ namespace FlightDirector_WPF
         #endregion
 
         #region Satellite Photomosaic Background
-        readonly string mapUriFormat = "pack://application:,,,/Maps/world.topo.bathy.2004{0:00}.3x5400x2700.png";
+        readonly string mapUriFormat = "pack://application:,,,/Maps/world.topo.bathy.2004{0:00}.3x720x360.png";
 
         public Uri MapUri
         {

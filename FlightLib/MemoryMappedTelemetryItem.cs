@@ -14,7 +14,7 @@ namespace FlightLib
         public string Value { get => _value; set { _value = value; ForwardData(value); } }
         public string Id { get; set; }
 
-        MemoryMappedViewAccessor accessor;
+        readonly MemoryMappedViewAccessor accessor;
 
         #region unimplemented properties
         public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }

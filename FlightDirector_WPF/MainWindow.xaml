@@ -69,8 +69,8 @@
             <local:TelemetryLabel TelemetryId="S0000009"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2">
-            <local:TelemetryLabel TelemetryId="USLAB000010"/>
             <local:TelemetryLabel TelemetryId="USLAB000095"/>
+            <local:TelemetryLabel TelemetryId="SIG00000001"/>
         </StackPanel>
 
         <Grid Grid.Row="2" Grid.RowSpan="2">
@@ -102,7 +102,7 @@
                         </Grid.RowDefinitions>
                         <Button Content="reload" Click="Iss_cam_reload"/>
                         <Button Content="popout" Click="Iss_cam_popout" Grid.Column="1"/>
-                        <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="https://www.youtube.com/embed/jPTD2gnZFUw?autoplay=true"/>
+                        <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="{Binding Path=IssCamUrl}"/>
                     </Grid>
                     <!-- EHDC -->
                     <Grid Grid.Column="1">
@@ -118,7 +118,7 @@
                         <Button Content="reload" Click="EHDC_reload"/>
                         <Button Content="popout" Click="EHDC_popout" Grid.Column="1"/>
                         <Button Content="map" Click="Map_popout" Grid.Column="2"/>
-                        <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="3" Source="https://www.youtube.com/embed/P9C25Un7xaM?autoplay=true"/>
+                        <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding Path=EhdcCamUrl}"/>
                     </Grid>
 
                     <Canvas VerticalAlignment="Top" Width="720" Height="360" Grid.ColumnSpan="2" Grid.Row="2"

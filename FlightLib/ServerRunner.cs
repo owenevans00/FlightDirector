@@ -8,7 +8,7 @@ namespace FlightLib
 {
     public abstract class ServerRunner
     {
-        internal bool Cancel;
+        protected internal bool Cancel;
 
         internal DataProvider data;
         internal void Data_ValueUpdated(object sender, UpdateEventArgs e)
@@ -16,13 +16,8 @@ namespace FlightLib
             data[e.Id].Value = e.NewValue;
         }
 
-        internal ServerRunner()
-        {
-            // 
-        }
-
-        internal void Init(Func<string[], int, ITelemetryItem> factory, string[] filters =null) {
-            data = new DataProvider(factory, filters);
+        protected void Init(Func<string[], int, ITelemetryItem> factory, string[] filters =null, Func<ITelemetryItem, ITelemetryItem> converter = null) {
+            data = new DataProvider(factory, filters,converter);
             data.ValueUpdated += Data_ValueUpdated;
         }
 
