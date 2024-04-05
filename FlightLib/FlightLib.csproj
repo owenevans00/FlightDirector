@@ -8,20 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<None Remove="ISS_Public_Telemetry.txt" />-->
     <None Remove="ISS_Public_Telemetry.txt" />
-    <None Remove="New Text Document.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="ISS_Public_Telemetry.txt" />
   </ItemGroup>
 
-
   <ItemGroup>
     <PackageReference Include="Lightstreamer.DotNetStandard.Client" Version="6.1.0" />
   </ItemGroup>
-
 
   <ItemGroup>
     <Resource Include="ISS_Public_Telemetry.txt" />

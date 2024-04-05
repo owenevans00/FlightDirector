@@ -49,12 +49,12 @@ namespace FlightLib
             if (double.IsNaN(la_rad)) la_rad = 0.0;
             Latitude = R2D(la_rad);
             // altitude is length of state vector minus radius of earth
-            // at specified latitude
-            var geo = Sqrt(
+            var geo = Sqrt( // radius of the geodesic at current lat/lon
                 (Pow((eq_radius2 * cos_lat), 2) + Pow((pl_radius2 * sin_lat), 2)) /
                 (Pow((eq_radius * cos_lat), 2) + Pow((pl_radius * sin_lat), 2))
                 );
-            Altitude = alt - geo;
+            Altitude = alt - geo; 
+            if (double.IsNaN(Altitude)) Altitude = 0.0;
 
             var lon_j2k = Acos(X / new Vector2(X, Y).Length());
             if (double.IsNaN(lon_j2k)) lon_j2k = 0.0;
@@ -90,13 +90,17 @@ namespace FlightLib
             if (!stateVec.ContainsKey(telemetryId) || values.Count() != 3) return false;
 
             // update relevant component of state vector by choosing the value corresponding
-            // to the updated telemetry id. This only needs to happen once per update cycle,
-            // even though it'll get called several times so use the tracker to shortcut it.
-            if (!stateVecTracker[telemetryId])
-                stateVec[telemetryId] = values.ToArray()[telemetryIds.IndexOf(telemetryId)];
-
+            // to the updated telemetry id. Note that we need to check for actual updated values
+            // because trusting everything to arrive in order leads to unstable and incorrect
+            // calculated values
+            var newval = values.ToArray()[telemetryIds.IndexOf(telemetryId)];
+            if (newval != stateVec[telemetryId])
+            {
+                stateVec[telemetryId] = newval;
+                // flag this component as updated
+                stateVecTracker[telemetryId] = true;
+            }
             // update and check if we have new data for all the state vector components
-            stateVecTracker[telemetryId] = true;
             if (!stateVecTracker.Values.All(v => v)) return false;
 
             // clear tracking and update geographic data values

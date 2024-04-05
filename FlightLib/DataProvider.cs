@@ -79,42 +79,35 @@ namespace FlightLib
                 this));
 
             customTelemetry.Add(new CustomTelemetry(
-               "USLAB000ALT", ".ANGLES", "Station Altitude", "Station Altitude", "km",
-               e2g.telemetryIds,
+                "USLAB000ALT", ".ANGLES", "Station Altitude", "Station Altitude", "km",
+                e2g.telemetryIds,
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Altitude}", true); },
-               this
-               ));
+                this));
 
             customTelemetry.Add(new CustomTelemetry("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "Unformatted Station Latitude", "",
-               new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
+                new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Latitude}", true); },
-                this
-                ));
+                this));
 
             customTelemetry.Add(new CustomTelemetry("USLAB00ULON", ".ANGLES", "Unformatted Station Longitude", "Unformatted Station Longitude", "",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Longitude}", true); },
-                this
-                ));
+                this));
 
             customTelemetry.Add(new CustomTelemetry("USLAB000LAT", ".ANGLES", "Latitude", "Latitude", "",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.FormattedLatitude}", true); },
-                this
-                ));
+                this));
 
             customTelemetry.Add(new CustomTelemetry("USLAB000LON", ".ANGLES", "Longitude", "Longitude", "",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.FormattedLongitude}", true); },
-                this
-                ));
+                this));
 
             customTelemetry.Add(new CustomTelemetry("USLAB000HDG", ".ANGLES", "Heading", "", "",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Heading}", true); },
-                this
-                ));
-
+                this));
 
             //customTelemetry.Add(new CustomTelemetry("SIG00000001", ".STATUS", "Telemetry", "", 
             //    new[] { "TIME_000001" },
