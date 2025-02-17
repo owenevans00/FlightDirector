@@ -12,7 +12,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0"/>
             <ColumnDefinition Width="0"/>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="2*"/>
             <!--<ColumnDefinition Width="*"/>-->
         </Grid.ColumnDefinitions>
@@ -20,9 +20,9 @@
                 <TextBlock Text="{Binding Name}"/>
             </Grid.ToolTip>
         <Label Foreground="SeaGreen" Content="{Binding Path=Id}" Grid.Column="0" FontSize="10"/>
-            <Label Foreground="SeaGreen" Content="{Binding Path=System}" Grid.Column="1" FontSize="10"/>
-            <Label Foreground="SeaGreen" Content="{Binding Path=Description}" Grid.Column="2" FontSize="12"/>
-            <Label Foreground="SeaGreen" Content="{Binding Path=TranslatedValue}" Grid.Column="3" FontSize="16"/>
+            <Label Foreground="SeaGreen" Content="{Binding Path=System}" Grid.Column="1" FontSize="10" />
+            <TextBlock Foreground="SeaGreen" Text="{Binding Path=Description}" Grid.Column="2" FontSize="12" TextWrapping="WrapWithOverflow"/>
+            <Label Foreground="SeaGreen" Content="{Binding Path=TranslatedValue}" Grid.Column="3" FontSize="16" Padding="0,0,10,0" HorizontalAlignment="Right"/>
     </Grid>
     </Border>
 </UserControl>

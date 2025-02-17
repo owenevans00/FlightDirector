@@ -69,7 +69,7 @@ namespace FlightLib
 
             // adjust for actual position & rotation of earth
             double time_adj = (DateTime.UtcNow.TimeOfDay.TotalSeconds - noon) / day * 360;
-            var lon_raw = lon_deg - date_adj - time_adj;
+            var lon_raw = (lon_deg - date_adj - time_adj) % 360;
             Longitude = lon_raw > 180 ? (lon_raw - 180) - 180 : lon_raw;
 
             if (prevLat != 0 && prevLon != 0)

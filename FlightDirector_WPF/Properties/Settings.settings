@@ -6,10 +6,10 @@
       <Value Profile="(Default)">C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe</Value>
     </Setting>
     <Setting Name="ISSCamUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://www.youtube.com/embed/jPTD2gnZFUw</Value>
+      <Value Profile="(Default)">OCem0E-0Q6Y</Value>
     </Setting>
     <Setting Name="EHDCCamUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://www.youtube.com/embed/P9C25Un7xaM</Value>
+      <Value Profile="(Default)">wG4YaEcNlb0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

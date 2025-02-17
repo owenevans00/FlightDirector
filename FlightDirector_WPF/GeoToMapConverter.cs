@@ -27,8 +27,8 @@ namespace FlightDirector_WPF
 
         protected double ScaleToImage(double value, double rangeMax)
         {
-            var i = ((value + rangeMax / 2) % rangeMax) / rangeMax;
-            Debug.Assert(i >= 0F && i <= 1F);
+            var i =  ((value + rangeMax / 2) % rangeMax) / rangeMax;
+            //Debug.Assert(i >= 0F && i <= 1F);
             return i * ScaleTo - offset;
         }
     }

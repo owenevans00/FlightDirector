@@ -61,7 +61,7 @@ namespace FlightLib
         // Calculated values for custom overrides.
         private void InitCustomTelemetry()
         {
-            customTelemetry.Add(new CustomTelemetry("TIME0000UTC", ".STATUS", "Station Time", "Station Time", "UTC",
+            customTelemetry.Add(new CustomTelemetry("TIME0000UTC", ".STATUS", "Station Time", "Station Time (UTC)", "UTC",
                 new[] { "TIME_000001", "TIME_000002" },
                 (a, b) =>
                 {
@@ -69,7 +69,7 @@ namespace FlightLib
                     if (year == 1980 || year == 0) year = DateTime.Now.Year;
                     DateTime d = new DateTime(year, 1, 1);
                     d = d.Add(TimeSpan.FromMilliseconds(a.First()));
-                    return ($"{d:yyyy-MM-dd HH:mm:ss} UTC", true);
+                    return ($"{d:yyyy-MM-dd HH:mm:ss}", true);
                 },
                 this));
 

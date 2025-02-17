@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace FlightDirector_WPF
     public class FlightViewModel : ObservableCollection<ITelemetryItem>, INotifyPropertyChanged, IValueConverter
     {
         private readonly DataProvider telemetry;
-        private readonly Func<string[],int, ITelemetryItem> factory = (a,i) => TelemetryItem.Create(a);
+        private readonly Func<string[], int, ITelemetryItem> factory = (a, i) => TelemetryItem.Create(a);
         private readonly List<TelemetryLogger> loggers;
 
         private readonly List<string> EVAIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095" };
@@ -32,6 +33,9 @@ namespace FlightDirector_WPF
         public Uri IssCamUrl { get; private set; }
         public Uri EhdcCamUrl { get; private set; }
 
+        internal Process unity;
+        public Command launchIIS3D => new Command(StartIIS3D, IIS3DNotRunning);
+
         public ITelemetryItem this[string TelemetryId]
         {
             get { return this.Where(i => i.Id == TelemetryId).SingleOrDefault(); }
@@ -41,7 +45,7 @@ namespace FlightDirector_WPF
         public FlightViewModel()
         {
             Log = new();
-            telemetry = new DataProvider(factory, converter:TelemetryItem.Convert);
+            telemetry = new DataProvider(factory, converter: TelemetryItem.Convert);
             telemetry.ValueUpdated += Telemetry_ValueUpdated;
             foreach (var i in telemetry.Items) Add(i);
             InitCustomTelemetry();
@@ -56,45 +60,12 @@ namespace FlightDirector_WPF
             VVO = new(this.Where(ti => VVOIds.Contains(ti.Id)));
             LSup = new(this.Where(ti => ti.System == "ETHOS"));
 
-            IssCamUrl = new(Properties.Settings.Default.ISSCamUrl + "?autoplay=true");
-            EhdcCamUrl= new(Properties.Settings.Default.EHDCCamUrl + "?autoplay=true");
+            IssCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.ISSCamUrl}?autoplay=true");
+            EhdcCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.EHDCCamUrl}?autoplay=true");
         }
 
         private void InitCustomTelemetry()
         {
-            //// Calculated values for custom overrides.
-            //Add(new TelemetryCalculator("USLAB000VEL", ".STATUS", "Velocity", "m/s",
-            //    new[] { telemetry["USLAB000035"], telemetry["USLAB000036"], telemetry["USLAB000037"] },
-            //    a => MathF.Sqrt(a.Select(i => MathF.Pow(i.AsFloat(), 2)).Sum()).ToString("0.00")));
-
-            //Add(new TelemetryCalculator("TIME0000UTC", ".STATUS", "Station Time", "UTC",
-            //    new[] { telemetry["TIME_000001"], telemetry["TIME_000002"] },
-            //    a => string.Format(
-            //        "{0}-{1:MM-dd HH:mm:ss}",
-            //        a.SecondOrDefault().AsInt(),
-            //        new DateTime(1980, 1, 1).AddMilliseconds(a.First().AsDouble())
-            //    )));
-
-            // Add(new TelemetryCalculator("USLAB00ULAT", ".ANGLES", "Unformatted Station Latitude", "",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => mvm.Latitude.ToString("N2")));
-
-            //Add(new TelemetryCalculator("USLAB00ULON", ".ANGLES", "Unformatted Station Longitude", "",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => mvm.Longitude.ToString("N2")));
-
-            //Add(new TelemetryCalculator("USLAB000LAT", ".STATUS", "Latitude", "",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => mvm.FormattedLatitude));
-
-            //Add(new TelemetryCalculator("USLAB000LON", ".STATUS", "Longitude", "",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => mvm.FormattedLongitude));
-
-            //Add(new TelemetryCalculator("USLAB000HDG", ".STATUS", "Heading", "",
-            //    new[] { telemetry["USLAB000032"], telemetry["USLAB000033"], telemetry["USLAB000034"] },
-            //    a => mvm.Heading.ToString("000")));
-
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
             a => AOS.SignalState(a), false));
         }
@@ -112,6 +83,13 @@ namespace FlightDirector_WPF
                 item.Value = newValue;
             }
         }
+        private void StartIIS3D(object obj)
+        {
+            unity = Process.Start(Properties.Settings.Default.ISS3DPath);
+        }
+
+        private bool IIS3DNotRunning(object none)
+            => unity is null || unity.HasExited;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
