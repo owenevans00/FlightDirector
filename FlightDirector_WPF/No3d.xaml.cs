@@ -1,4 +1,6 @@
-﻿using FlightLib;
+﻿using FlightDirector_WPF.Properties;
+using FlightLib;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,7 +24,7 @@ namespace FlightDirector_WPF
     public partial class No3d : Window
     {
         TelemetryServer ts;
-       
+
         public No3d()
         {
             InitializeComponent();
@@ -44,6 +46,13 @@ namespace FlightDirector_WPF
         private void Iss_cam_popout(object sender, RoutedEventArgs e)
             => Process.Start(new ProcessStartInfo() { FileName = iss_cam.Source.AbsoluteUri, UseShellExecute = true });
 
+        private void Iss_cam_config(object sender, RoutedEventArgs e)
+        {
+            var dialog = new InputBox("Enter new URL for live stream", "ISS Live Stream", Settings.Default.ISSCamUrl);
+            if ((dialog.ShowDialog() ?? false))
+                (this.Resources["dd"] as FlightViewModel)?.ValidateAndUpdateISSCamUrl(dialog.Data);
+        }
+
         private void EHDC_reload(object sender, RoutedEventArgs e)
             => ehd_cam.CoreWebView2.Navigate($"{ehd_cam.Source}");
 
@@ -53,7 +62,14 @@ namespace FlightDirector_WPF
         private void Map_popout(object sender, RoutedEventArgs e)
         {
             var fvm = this.Resources["dd"] as FlightViewModel;
-            var maps_uri = $"https://www.google.com/maps/place/{fvm["USLAB000LAT"].TranslatedValue}+{fvm["USLAB000LON"].TranslatedValue}";
+            var la = fvm["USLAB00ULAT"];
+            var lo = fvm["USLAB00ULON"];
+            var maps_uri = string.Format(
+                "https://www.google.com/maps/@?api=1&map_action=map&basemap=terrain&center={0},{1}&zoom={2}",
+                la.Value,
+                lo.Value,
+                11);
+
             Process.Start(new ProcessStartInfo() { FileName = maps_uri, UseShellExecute = true });
         }
 

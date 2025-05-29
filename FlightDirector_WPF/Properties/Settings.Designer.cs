@@ -12,7 +12,7 @@ namespace FlightDirector_WPF.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.13.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -32,18 +32,21 @@ namespace FlightDirector_WPF.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("OCem0E-0Q6Y")]
+        [global::System.Configuration.DefaultSettingValueAttribute("4zXSrtbqYjI")]
         public string ISSCamUrl {
             get {
                 return ((string)(this["ISSCamUrl"]));
+            }
+            set {
+                this["ISSCamUrl"] = value;
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("wG4YaEcNlb0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("fO9e9jnhYK8")]
         public string EHDCCamUrl {
             get {
                 return ((string)(this["EHDCCamUrl"]));

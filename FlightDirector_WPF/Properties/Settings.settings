@@ -5,11 +5,11 @@
     <Setting Name="ISS3DPath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Users\owene\source\ISS_3D\Build\ISS_3D.exe</Value>
     </Setting>
-    <Setting Name="ISSCamUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">OCem0E-0Q6Y</Value>
+    <Setting Name="ISSCamUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">4zXSrtbqYjI</Value>
     </Setting>
     <Setting Name="EHDCCamUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">wG4YaEcNlb0</Value>
+      <Value Profile="(Default)">fO9e9jnhYK8</Value>
     </Setting>
   </Settings>
 </SettingsFile>

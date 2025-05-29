@@ -94,6 +94,7 @@ Background="Black" Foreground="SeaGreen">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -101,7 +102,8 @@ Background="Black" Foreground="SeaGreen">
                         </Grid.RowDefinitions>
                         <Button Content="reload" Click="Iss_cam_reload"/>
                         <Button Content="popout" Click="Iss_cam_popout" Grid.Column="1"/>
-                        <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="2" Source="{Binding Path=IssCamUrl}"/>
+                        <Button Content="configure" Click="Iss_cam_config" Grid.Column="2"/>
+                        <wv2:WebView2 x:Name="iss_cam"  Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding Path=IssCamUrl}"/>
                     </Grid>
                     <!-- EHDC -->
                     <Grid Grid.Column="1">

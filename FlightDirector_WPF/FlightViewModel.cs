@@ -9,22 +9,23 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
 
 namespace FlightDirector_WPF
 {
-    public class FlightViewModel : ObservableCollection<ITelemetryItem>, INotifyPropertyChanged, IValueConverter
+    public partial class FlightViewModel : ObservableCollection<ITelemetryItem>, INotifyPropertyChanged, IValueConverter
     {
         private readonly DataProvider telemetry;
         private readonly Func<string[], int, ITelemetryItem> factory = (a, i) => TelemetryItem.Create(a);
         private readonly List<TelemetryLogger> loggers;
 
-        private readonly List<string> EVAIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095" };
-        private readonly List<string> VVOIds = new() { "TIME0000UTC", "USLAB000011", "USLAB000012", "USLAB000016", "USLAB000017", "USLAB000081", "USLAB000095", "USLAB000099", "USLAB000100", "USLAB000101", "S0000008", "S0000009", "S0000006", "S0000007" };
+        private readonly List<string> EVAIds = ["TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095"];
+        private readonly List<string> VVOIds = ["TIME0000UTC", "USLAB000011", "USLAB000012", "USLAB000016", "USLAB000017", "USLAB000081", "USLAB000095", "USLAB000099", "USLAB000100", "USLAB000101", "S0000008", "S0000009", "S0000006", "S0000007"];
 
-        //private readonly MapViewModel mvm = new();
-
+        private readonly Regex URLRegex_ = URLRegex();
+        
         public ObservableCollection<string> Log { get; private set; }
         public ObservableCollection<ITelemetryItem> EVA { get; private set; }
         public ObservableCollection<ITelemetryItem> VVO { get; private set; }
@@ -64,6 +65,29 @@ namespace FlightDirector_WPF
             EhdcCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.EHDCCamUrl}?autoplay=true");
         }
 
+        public void ValidateAndUpdateISSCamUrl(string maybeValidUrl)
+        {
+            // full embed code entered - extract just the URL
+            if (maybeValidUrl.StartsWith("<"))
+            {
+                var chunks = maybeValidUrl.Split('"');
+                maybeValidUrl = chunks.FirstOrDefault(c => c.Contains("/"), "");
+            }
+            // YT URL - get just the video code
+            if (maybeValidUrl.Contains('/'))
+            {
+                maybeValidUrl = maybeValidUrl.Split("/").Last();
+            }
+            // video codes are 11 character alphanumeric strings
+            //if (maybeValidUrl.Length == 11)
+            if (URLRegex().IsMatch(maybeValidUrl))
+            {
+                Properties.Settings.Default.ISSCamUrl = maybeValidUrl;
+                Properties.Settings.Default.Save();
+                IssCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.ISSCamUrl}?autoplay=true");
+            }
+        }
+
         private void InitCustomTelemetry()
         {
             Add(new TelemetryCalculator("SIG00000001", ".STATUS", "Telemetry", "", new[] { telemetry["TIME_000001"] },
@@ -100,6 +124,9 @@ namespace FlightDirector_WPF
         {
             throw new NotImplementedException();
         }
+
+        [GeneratedRegex("\\w{11}", RegexOptions.Compiled | RegexOptions.ECMAScript)]
+        private static partial Regex URLRegex();
     }
 
     class NullTelemetry : TelemetryItemBase { }
