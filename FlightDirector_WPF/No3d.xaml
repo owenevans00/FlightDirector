@@ -9,7 +9,7 @@
 
 Loaded="Window_Loaded"
 Closed="Window_Closed"
-Title="ISS Flight Director" Height="760" Width="725"
+Title="ISS Flight Director" Height="760" Width="740"
 Background="Black" Foreground="SeaGreen">
     <Window.Resources>
         <local:FlightViewModel x:Key="dd"/>
@@ -51,32 +51,36 @@ Background="Black" Foreground="SeaGreen">
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="105"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="0"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="360"/>
         </Grid.RowDefinitions>
-        <UniformGrid Columns="3" Rows="3" Grid.ColumnSpan="2">
+        <UniformGrid Columns="3" Rows="4" Grid.ColumnSpan="2">
             <local:TelemetryLabel TelemetryId="USLAB000086"/>
             <local:TelemetryLabel TelemetryId="SIG00000001"/>
             <local:TelemetryLabel TelemetryId="TIME0000UTC"/>
             <local:TelemetryLabel TelemetryId="USLAB000058"/>
             <local:TelemetryLabel TelemetryId="USLAB000059"/>
             <local:TelemetryLabel TelemetryId="USLAB000095"/>
-            <local:TelemetryLabel TelemetryId="USLAB000ALT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LAT"/>
             <local:TelemetryLabel TelemetryId="USLAB000LON"/>
+            <local:TelemetryLabel TelemetryId="USLAB000HDG"/>
+            <local:TelemetryLabel TelemetryId="S0000008"/>
+            <local:TelemetryLabel TelemetryId="USLAB000ALT"/>
+            <local:TelemetryLabel TelemetryId="S0000009"/>
 
         </UniformGrid>
-        <Grid Grid.Row="1">
+        <!--<Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <local:TelemetryLabel TelemetryId="S0000008"/>
+            <local:TelemetryLabel TelemetryId="USLAB000HDG" Grid.Column="1"/>
             <local:TelemetryLabel TelemetryId="S0000009" Grid.Column="2"/>
-        </Grid>
+        </Grid>-->
 
         <TabControl  Grid.Row="2" Grid.Column="2" Grid.RowSpan="2" BorderBrush="Black" Background="Black">
             <TabItem Header="Visual" Background="Black">

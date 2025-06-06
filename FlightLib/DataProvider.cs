@@ -104,7 +104,7 @@ namespace FlightLib
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.FormattedLongitude}", true); },
                 this));
 
-            customTelemetry.Add(new CustomTelemetry("USLAB000HDG", ".ANGLES", "Heading", "", "",
+            customTelemetry.Add(new CustomTelemetry("USLAB000HDG", ".ANGLES", "Heading", "Heading", "°",
                 new[] { "USLAB000032", "USLAB000033", "USLAB000034" },
                 (a, b) => { e2g.TryUpdate(a, b); return ($"{e2g.Heading}", true); },
                 this));
