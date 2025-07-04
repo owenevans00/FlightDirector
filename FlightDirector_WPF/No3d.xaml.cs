@@ -24,6 +24,8 @@ namespace FlightDirector_WPF
     public partial class No3d : Window
     {
         TelemetryServer ts;
+        FlightViewModel fvm;
+        MapViewModel map;
 
         public No3d()
         {
@@ -31,7 +33,9 @@ namespace FlightDirector_WPF
 #if DEBUG
             Title += " - Debug";
 #endif
-            BindConverters();
+            map = (MapViewModel)Resources["map"];
+            fvm = (FlightViewModel)Resources["fvm"];
+            //BindConverters();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +54,7 @@ namespace FlightDirector_WPF
         {
             var dialog = new InputBox("Enter new URL for live stream", "ISS Live Stream", Settings.Default.ISSCamUrl);
             if ((dialog.ShowDialog() ?? false))
-                (this.Resources["dd"] as FlightViewModel)?.ValidateAndUpdateISSCamUrl(dialog.Data);
+                fvm.ValidateAndUpdateISSCamUrl(dialog.Data);
         }
 
         private void EHDC_reload(object sender, RoutedEventArgs e)
@@ -61,7 +65,6 @@ namespace FlightDirector_WPF
 
         private void Map_popout(object sender, RoutedEventArgs e)
         {
-            var fvm = this.Resources["dd"] as FlightViewModel;
             var la = fvm["USLAB00ULAT"];
             var lo = fvm["USLAB00ULON"];
             var maps_uri = string.Format(
@@ -105,5 +108,8 @@ namespace FlightDirector_WPF
                 ts.Stop();
             }
         }
+
+        private void mapCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+            => map.ContainerSizeChanged(e.NewSize);
     }
 }

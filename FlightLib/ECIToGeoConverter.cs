@@ -70,14 +70,17 @@ namespace FlightLib
             // adjust for actual position & rotation of earth
             double time_adj = (DateTime.UtcNow.TimeOfDay.TotalSeconds - noon) / day * 360;
             var lon_raw = (lon_deg - date_adj - time_adj) % 360;
-            Longitude = lon_raw > 180 ? (lon_raw - 180) - 180 : lon_raw;
+            if (lon_raw < -180) lon_raw += 360;
+            if (lon_raw > 180) lon_raw -= 360;
+            Longitude = lon_raw; // > 180 ? (lon_raw - 180) - 180 : lon_raw;
 
             if (prevLat != 0 && prevLon != 0)
             {
                 var deltaLat = (float)(Latitude - prevLat);
                 var deltaLon = (float)(Longitude - prevLon);
-                var hdg_raw = R2D(Acos(deltaLon / new Vector2(deltaLat, deltaLon).Length()));
-                Heading = hdg_raw + (deltaLat > 0 ? 0 : 90);
+                //var hdg_raw = R2D(Acos(deltaLon / new Vector2(deltaLat, deltaLon).Length()));
+                var hdg_raw = R2D(Atan(deltaLon/ deltaLat));
+                Heading = hdg_raw < 0 ? hdg_raw + 180 : hdg_raw;
             }
             prevLat = Latitude;
             prevLon = Longitude;

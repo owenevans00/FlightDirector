@@ -9,32 +9,20 @@ using System.Windows;
 
 namespace FlightDirector_WPF
 {
-    class TelemetryLogger
+    /// <summary>
+    /// Logger for changes to imporetant telemetry values like station mode
+    /// or attitude control system state
+    /// </summary>
+    class TelemetryAlertLogger : TelemetryLogger
     {
-        internal event EventHandler<LogEvent> Log;
-        public TelemetryLogger(TelemetryItemBase telemetryItem)
-        {
-            var descr = DependencyPropertyDescriptor.FromProperty(
-                TelemetryItemBase.TranslatedValueProperty,
-                typeof(TelemetryItemBase));
-            descr.AddValueChanged(telemetryItem, ValueChanged);
-                
-        }
+        public TelemetryAlertLogger(TelemetryItemBase telemetryItem) : base(telemetryItem) { }
 
-        void ValueChanged(object sender, EventArgs e)
+        internal override void ValueChanged(object sender, EventArgs e)
         {
             var ti = sender as TelemetryItemBase;
             var logText = $"{DateTime.UtcNow:HH:mm:ss.ff}\t{ti.Description}\t{ti.TranslatedValue}";
-            Log?.Invoke(this, new LogEvent(logText));
+            InvokeLog(logText);
         }
     }
 
-    internal class LogEvent
-    {
-        public string LogText { get; private set; }
-        internal LogEvent(string LogText)
-        {
-            this.LogText = LogText;
-        }
-    }
 }

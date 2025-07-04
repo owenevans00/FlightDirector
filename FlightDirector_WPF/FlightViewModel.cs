@@ -1,4 +1,5 @@
 ﻿using FlightLib;
+using sys.thread;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,12 +18,14 @@ namespace FlightDirector_WPF
 {
     public partial class FlightViewModel : ObservableCollection<ITelemetryItem>, INotifyPropertyChanged, IValueConverter
     {
-        private readonly DataProvider telemetry;
-        private readonly Func<string[], int, ITelemetryItem> factory = (a, i) => TelemetryItem.Create(a);
-        private readonly List<TelemetryLogger> loggers;
-
         private readonly List<string> EVAIds = ["TIME0000UTC", "USLAB000011", "USLAB000012", "AIRLOCK000048", "AIRLOCK000054", "AIRLOCK000049", "AIRLOCK000001", "AIRLOCK000003", "AIRLOCK000007", "AIRLOCK000009", "S0000008", "S0000009", "USLAB000095"];
         private readonly List<string> VVOIds = ["TIME0000UTC", "USLAB000011", "USLAB000012", "USLAB000016", "USLAB000017", "USLAB000081", "USLAB000095", "USLAB000099", "USLAB000100", "USLAB000101", "S0000008", "S0000009", "S0000006", "S0000007"];
+        private readonly List<string> DebugIds = ["USLAB00ULAT", "USLAB000LON", "USLAB00ULON", "USLAB000HDG"];
+
+        private readonly DataProvider telemetry;
+        private readonly Func<string[], int, ITelemetryItem> factory = (a, i) => TelemetryItem.Create(a);
+        private readonly List<TelemetryLogger> alertLoggers;
+        private readonly List<TelemetryLogger> debugLoggers;
 
         private readonly Regex URLRegex_ = URLRegex();
         
@@ -45,16 +48,20 @@ namespace FlightDirector_WPF
 
         public FlightViewModel()
         {
-            Log = new();
+            Log = [];
             telemetry = new DataProvider(factory, converter: TelemetryItem.Convert);
             telemetry.ValueUpdated += Telemetry_ValueUpdated;
             foreach (var i in telemetry.Items) Add(i);
             InitCustomTelemetry();
 
-            loggers = new(this.Where(ti => ti.AlertOnChange)
-                .Select(ti => new TelemetryLogger(ti as TelemetryItemBase)));
-            foreach (var l in loggers)
-                l.Log += L_Log;
+            alertLoggers = new(this.Where(ti => ti.AlertOnChange)
+                .Select(ti => new TelemetryAlertLogger(ti as TelemetryItemBase)));
+            foreach (var l in alertLoggers)
+                l.Log += logAlert;
+            debugLoggers = new(this.Where(ti => DebugIds.Contains(ti.Id))
+                .Select(ti => new TelemetryDebugLogger(ti)));
+            foreach(var l in debugLoggers)
+                l.Log += logDebugTelemetry;
 
             EVA = new(this.Where(ti => EVAIds.Contains(ti.Id)));
             Status = new(this.Where(ti => ti.System == ".STATUS"));
@@ -64,6 +71,8 @@ namespace FlightDirector_WPF
             IssCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.ISSCamUrl}?autoplay=true");
             EhdcCamUrl = new($"https://www.youtube.com/embed/{Properties.Settings.Default.EHDCCamUrl}?autoplay=true");
         }
+
+
 
         public void ValidateAndUpdateISSCamUrl(string maybeValidUrl)
         {
@@ -94,7 +103,9 @@ namespace FlightDirector_WPF
             a => AOS.SignalState(a), false));
         }
 
-        private void L_Log(object sender, LogEvent e) => Log.Add(e.LogText);
+        private void logAlert(object sender, LogEvent e) => Log.Add(e.LogText);
+        private void logDebugTelemetry(object sender, LogEvent e)
+            => Debug.WriteLine(e.LogText);
 
         private void Telemetry_ValueUpdated(object sender, UpdateEventArgs e)
             => Application.Current?.Dispatcher.BeginInvoke(DoUpdate, e.Id, e.NewValue, e.RawTelemetry);

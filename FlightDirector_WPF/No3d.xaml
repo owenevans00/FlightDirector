@@ -9,14 +9,15 @@
 
 Loaded="Window_Loaded"
 Closed="Window_Closed"
-Title="ISS Flight Director" Height="760" Width="740"
+Title="ISS Flight Director" Height="760" Width="680"
 Background="Black" Foreground="SeaGreen">
     <Window.Resources>
-        <local:FlightViewModel x:Key="dd"/>
+        <local:FlightViewModel x:Key="fvm"/>
         <local:MapViewModel x:Key="map"/>
-        <local:GeoToLatConverter x:Key="gltc"/>
-        <local:GeoToLonConverter x:Key="glnc"/>
-        <CollectionViewSource x:Key="cv" Source="{Binding Source={StaticResource dd}}" >
+        <TranslateTransform x:Key="creditsTransform" Y="-40"/>
+        <!--<local:GeoToLatConverter x:Key="gltc"/>
+        <local:GeoToLonConverter x:Key="glnc"/>-->
+        <CollectionViewSource x:Key="cv" Source="{Binding Source={StaticResource fvm}}" >
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="System"/>
             </CollectionViewSource.GroupDescriptions>
@@ -45,7 +46,7 @@ Background="Black" Foreground="SeaGreen">
         </Style>
     </Window.Resources>
 
-    <Grid DataContext="{StaticResource dd}">
+    <Grid DataContext="{StaticResource fvm}">
         <Grid.ColumnDefinitions>
             <!--<ColumnDefinition Width="720"/>-->
             <ColumnDefinition Width="*"/>
@@ -90,8 +91,8 @@ Background="Black" Foreground="SeaGreen">
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="360"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
                     <!-- Onboard ISS Camera -->
                     <Grid>
@@ -126,27 +127,46 @@ Background="Black" Foreground="SeaGreen">
                         <wv2:WebView2 x:Name="ehd_cam" Grid.Row="1" Grid.ColumnSpan="3" Source="{Binding Path=EhdcCamUrl}"/>
                     </Grid>
 
-                    <Canvas VerticalAlignment="Top" Width="720" Height="360" Grid.ColumnSpan="2" Grid.Row="2" Background="Black"
-                        Name="mapCanvas" DataContext="{StaticResource map}">
-                        <Image Source="{Binding Path=MapUri}" Width="{Binding ElementName=mapCanvas, Path=ActualWidth}"/>
-                        <Polygon Points="0,0 5,7 0,-10 -5,7" Fill="DarkRed"
-                             Canvas.Left="{Binding Path=Longitude, Converter={StaticResource glnc}}"
-                             Canvas.Top="{Binding Path=Latitude, Converter={StaticResource gltc}}">
-                            <Polygon.RenderTransform>
-                                <RotateTransform Angle="{Binding Path=Heading}"/>
-                            </Polygon.RenderTransform>
-                        </Polygon>
-                        <Button Content="3D View" HorizontalAlignment="Left" Canvas.Left="672" VerticalAlignment="Center" Command="{Binding Source={StaticResource dd} , Path=launchIIS3D}"/>
-                        <!--<Ellipse Width="10" Height="10" Fill="DarkRed"
-                        Canvas.Left="{Binding Path=Longitude, Converter={StaticResource glnc}}"
-                        Canvas.Top="{Binding Path=Latitude, Converter={StaticResource gltc}}"/>-->
-                        <Label Canvas.Left="80" Canvas.Top="337" Foreground="Black">Earth Imagery: Visible Earth, NASA Goddard Space Flight Center 2004. ISS 3D Model: NASA Johnson Space Center 2011</Label>
-                    </Canvas>
+                    <Grid Grid.ColumnSpan="2" Grid.Row="2"  DataContext="{StaticResource map}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Canvas VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Background="Black" Grid.RowSpan="3"
+                        SizeChanged="mapCanvas_SizeChanged"
+                        Name="mapCanvas">
+                            <Image Source="{Binding Path=MapUri}" Name="mapImage"
+                               Width="{Binding Width}" Height="{Binding Height}"
+                               Canvas.Top="{Binding Top}" Canvas.Left="{Binding Left}"/>
+                            <!--<Polygon Name="headingBug" Points="0,0 5,7 0,-10 -5,7" Fill="DarkRed"
+     Canvas.Left="{Binding Path=Longitude, Converter={StaticResource glnc}}"
+     Canvas.Top="{Binding Path=Latitude, Converter={StaticResource gltc}}">-->
+                            <Polygon Name="headingBug" Points="0,0 5,7 0,-10 -5,7"
+                                 Stroke="Red" Fill="DarkRed"
+                                 Canvas.Left="{Binding Path=MapLongitudePosition}"
+                                 Canvas.Top="{Binding Path=MapLatitudePosition}">
+                                <Polygon.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="{Binding Path=Heading}"/>
+                                        <TranslateTransform X="{Binding Left}" Y="{Binding Top}"/>
+                                    </TransformGroup>
+                                </Polygon.RenderTransform>
+                            </Polygon>
+                        </Canvas>
+                        <Button Content="3D View" HorizontalAlignment="Right" VerticalAlignment="Center" Command="{Binding Source={StaticResource fvm} , Path=launchIIS3D}"/>
+                        <TextBlock Text="Earth Imagery: Visible Earth, NASA Goddard Space Flight Center 2004. ISS 3D Model: NASA Johnson Space Center 2011"
+                            Grid.Row="2" HorizontalAlignment="Center" Foreground="Black">
+                            <TextBlock.RenderTransform>
+                                <TranslateTransform Y="{Binding LabelOffset}"/>
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Normal Ops">
                 <DataGrid
-        ItemsSource="{Binding Source={StaticResource dd}, Path=Status}"
+        ItemsSource="{Binding Source={StaticResource fvm}, Path=Status}"
         AutoGenerateColumns="False"
         SelectionUnit="Cell"
                 ColumnHeaderStyle="{DynamicResource ColumnHeaderStyle1}">
@@ -159,7 +179,7 @@ Background="Black" Foreground="SeaGreen">
             </TabItem>
             <TabItem Header="EVA" Foreground="SeaGreen" Background="Black">
                 <DataGrid
-        ItemsSource="{Binding Source={StaticResource dd}, Path=EVA}"
+        ItemsSource="{Binding Source={StaticResource fvm}, Path=EVA}"
         AutoGenerateColumns="False"
         Foreground="SeaGreen" Background="Black" RowBackground="Black"
         SelectionUnit="Cell"
@@ -173,7 +193,7 @@ Background="Black" Foreground="SeaGreen">
             </TabItem>
             <TabItem Header="ECLSS">
                 <DataGrid
-        ItemsSource="{Binding Source={StaticResource dd}, Path=LSup}"
+        ItemsSource="{Binding Source={StaticResource fvm}, Path=LSup}"
         AutoGenerateColumns="False"
         Foreground="SeaGreen" Background="Black" RowBackground="Black"
         SelectionUnit="Cell">
@@ -186,7 +206,7 @@ Background="Black" Foreground="SeaGreen">
             </TabItem>
             <TabItem Header="Docking">
                 <DataGrid
-        ItemsSource="{Binding Source={StaticResource dd}, Path=VVO}"
+        ItemsSource="{Binding Source={StaticResource fvm}, Path=VVO}"
         AutoGenerateColumns="False"
         Foreground="SeaGreen" Background="Black" RowBackground="Black"
         SelectionUnit="Cell">
@@ -242,7 +262,7 @@ Background="Black" Foreground="SeaGreen">
             </TabItem>
             <TabItem Header="Log">
                 <ListView Foreground="SeaGreen" Background="Black"
-        ItemsSource="{Binding Source={StaticResource dd}, Path=Log}"/>
+        ItemsSource="{Binding Source={StaticResource fvm}, Path=Log}"/>
             </TabItem>
         </TabControl>
     </Grid>

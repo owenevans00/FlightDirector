@@ -1,5 +1,4 @@
 ﻿using com.lightstreamer.client;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -136,6 +135,7 @@ namespace FlightLib
         #region unused callbacks
 #pragma warning disable IDE1006 // Naming Styles
 #pragma warning disable CA1822 // Mark members as static
+
         public void onClearSnapshot(string itemName, int itemPos)
         {
 
